@@ -1,0 +1,17 @@
+{
+  "name": "react-datetime-picker",
+  "version": "1.0.0",
+  "description": "simple datetime picker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "datetime-picker",
+    "datepicker",
+    "timepicker"
+  ],
+  "author": "Dina Islamova <dina.islamova1@gmail.com>",
+  "license": "MIT"
+}
