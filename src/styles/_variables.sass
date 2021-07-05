@@ -1,0 +1,87 @@
+// color-scheme
+$white: #FFFFFF
+$gray: #303946
+$blue: #0044C8
+$green: #09D780
+$red: #ea1e43
+$black: #192331
+
+// animation settings
+$base-timing-function: cubic-bezier(0.25, 0.46, 0.33, 0.98)
+$base-duration:        700ms
+
+// fonts settings
+$font-family-sans: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif
+$font-family-serif: TimesNewRoman, serif
+
+$font-size-base:    16px
+$line-height-base:  24px
+
+$bold:     700
+$medium:   500
+$normal:   400
+$thin:     100
+
+$font-weight: (bold: 700, medium: 500, regular: 400, thin: 100)
+
+@use "sass:math"
+
+@use "sass:list"
+@use "sass:map"
+
+@function rem($sizes)
+  $result: null
+  @if list.length($sizes) >= 1
+    $value: list.nth($sizes, 1)
+    @if $value != 0 and $value != auto
+      $remSize: math.div($value, $font-size-base)
+      $result: #{$remSize}rem
+    @else
+      $result: $value
+  @if list.length($sizes) >= 2
+    $value: list.nth($sizes, 2)
+    @if $value != 0 and $value != auto
+      $remSize: math.div($value, $font-size-base)
+      $result: list.append($result, #{$remSize}rem)
+    @else
+      $result: list.append($result, $value)
+  @if list.length($sizes) >= 3
+    $value: list.nth($sizes, 3)
+    @if $value != 0 and $value != auto
+      $remSize: math.div($value, $font-size-base)
+      $result: list.append($result, #{$remSize}rem)
+    @else
+      $result: list.append($result, $value)
+  @if list.length($sizes) >= 4
+    $value: list.nth($sizes, 4)
+    @if $value != 0 and $value != auto
+      $remSize: math.div($value, $font-size-base)
+      $result: list.append($result, #{$remSize}rem)
+    @else
+      $result: list.append($result, $value)
+  @return $result
+
+
+
+= font-size($font-size: $font-size-base, $line-height: $line-height-base)
+  font-size: rem($font-size)
+  line-height: math.div($line-height, $font-size)
+
+= font($weight, $size: $font-size-base, $height: $line-height-base)
+  font-weight: map.get($font-weight, $weight)
+  @if $size
+    +font-size($size, $height)
+
+= optional-at-root($sel)
+  @at-root #{if(not &, $sel, selector-append(&, $sel))}
+    @content
+
+= placeholder
+  +optional-at-root('::-webkit-input-placeholder')
+    @content
+  +optional-at-root(':-moz-placeholder')
+    @content
+  +optional-at-root('::-moz-placeholder')
+    @content
+  +optional-at-root(':-ms-input-placeholder')
+    @content

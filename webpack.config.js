@@ -1,6 +1,7 @@
 const { resolve } = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const TerserWebpackPlugin = require("terser-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -23,6 +24,18 @@ const config = {
                 use: "babel-loader",
                 exclude: /node_modules/,
             },
+            {
+                test: /\.(s(a|c)ss)$/,
+                use: isProd ?
+                    [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'] :
+                    ['style-loader', 'css-loader', 'sass-loader']
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|svg)$/,
+                use: {
+                    loader: 'url-loader',
+                },
+            },
         ],
     },
     plugins: [
@@ -31,6 +44,7 @@ const config = {
             filename: "index.html",
             inject: "body",
         }),
+        new MiniCssExtractPlugin(),
     ],
 };
 
