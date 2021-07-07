@@ -33,55 +33,5 @@ body
   outline: none
 .container
   padding: rem(100px)
-.dt,
-.dt-input-box
-  display: inline-block
-  position: relative
-.dt-picker
-  &-box
-    position: absolute
-    top: 0
-    left: 0
-    right: 0
-    background-color: $light
-    box-shadow: rem(0px 1px 3px) rgba(0, 0, 0, 0.1)
-    padding: rem(16px)
-    z-index: 10
-    &__content
-      display: flex
-      justify-content: space-between
-      align-items: flex-start
-      flex-flow: row nowrap
-    &__footer
-      width: 100%
-      display: flex
-      justify-content: space-between
-      align-items: center
-      flex-flow: row wrap
-      &_right .dt-picker-button:first-child
-        margin-right: rem(4px)
 
-  &-title
-    +font-size(16px, 22px)
-    color: $gray
-  &-button
-    appearance: none
-    border-radius: rem(4px)
-    background-color: transparent
-    box-shadow: none
-    color: $gray
-    border: rem(1px) solid
-    transition: 80ms
-    font-family: $font-family-sans
-    cursor: pointer
-    display: inline-block
-    width: auto
-    margin: 0
-    padding: rem(4px 6px)
-    &--green
-      color: $blue
-
-@import "icon"
-@import "field"
-@import "picker"
 

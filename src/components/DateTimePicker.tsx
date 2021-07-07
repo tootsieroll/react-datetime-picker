@@ -2,6 +2,7 @@ import React from 'react';
 import Field from './Field';
 import Picker from './Picker';
 import Icon from './Icon';
+import '/src/styles/dt.sass';
 import calendar from '/src/images/calendar.svg';
 import clock from '/src/images/clock.svg';
 import close from '/src/images/close.svg';
@@ -10,7 +11,6 @@ const DateTimePicker: React.FC<any> = ({ value, pickerType = 'datetime', placeho
     const [val, setVal] = React.useState(value);
     const [isOpen, setOpen] = React.useState(false);
     const pickers = pickerType === 'datetime' ? ['date', 'time'] : [pickerType];
-    console.log(pickers);
     if (!placeholder) {
         switch (pickerType) {
             case 'date':
