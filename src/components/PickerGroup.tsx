@@ -1,11 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
 
-const PickerGroup: React.FC<any> = ({ type, items, selected }) => {
+const PickerGroup: React.FC<any> = ({ type, items, selected, onChange }) => {
     const groupRef = React.createRef<any>();
     const [isDragging, setDragging] = React.useState(null as any);
     const setCurrentPosition = () => {
-        const select = groupRef.current.querySelector('.dt-picker-item--selected');
+        const select = groupRef.current?.querySelector('.dt-picker-item--selected');
         if (select) {
             select.scrollIntoView({
                 block: 'center',
@@ -24,18 +24,23 @@ const PickerGroup: React.FC<any> = ({ type, items, selected }) => {
         });
     };
     const handleDragStop = () => {
+        let result: any = null;
         const arr = Array.prototype.slice.call(groupRef.current.querySelectorAll('.dt-picker-item'));
         for (let i = 0; i < arr.length; i++) {
-            if (isInViewport(arr[i])) {
+            if (isInViewport(arr[i]) && !arr[i].classList.contains('dt-picker-item--selected')) {
                 groupRef.current
                     .querySelector('.dt-picker-item--selected')
-                    .classList.remove('dt-picker-item--selected');
+                    ?.classList.remove('dt-picker-item--selected');
                 arr[i].classList.add('dt-picker-item--selected');
+                result = [type, arr[i].textContent, i];
                 break;
             }
         }
-        setCurrentPosition();
+        setTimeout(() => setCurrentPosition(), 30);
         setDragging(null);
+        if (result) {
+            onChange(result);
+        }
     };
     const handleDrag = (e: any) => {
         if (isDragging && groupRef.current) {

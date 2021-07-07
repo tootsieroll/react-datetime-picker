@@ -1,24 +1,13 @@
-@import 'src/styles/variables'
+@import 'variables'
 
 .dt-picker
   position: relative
   display: flex
-  justify-content: flex-start
+  justify-content: center
   align-items: flex-start
   flex-flow: row nowrap
   height: rem(200px)
-  &-box
-    position: absolute
-    top: 100%
-    left: 0
-    right: 0
-    background-color: $light
-    box-shadow: rem(0px 1px 3px) rgba(0, 0, 0, 0.1)
-    display: flex
-    justify-content: space-between
-    align-items: flex-start
-    flex-flow: row nowrap
-    padding: rem(16px)
+  flex: 1
   &-selected
     user-select: none
     pointer-events: none

@@ -9,7 +9,6 @@ const App: React.FC = () => {
                 name={'datepicker'}
                 onChange={(value: any) => console.log(value)}
                 placeholder={'Выберите дату и время'}
-                value={1339043100000}
             />
         </div>
     );

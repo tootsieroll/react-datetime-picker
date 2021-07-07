@@ -1,16 +1,44 @@
 import React from 'react';
-import calendar from '/src/images/calendar.svg';
-import Icon from './Icon';
 import classNames from 'classnames';
-import './Field.sass';
 
-const Field: React.FC<any> = ({ meta, placeholder, ...props }) => {
-    const [state, setState] = React.useState({ hasLabel: !!props.value?.length, touched: false });
+const Field: React.FC<any> = ({ meta, placeholder, value, pickerType, ...props }) => {
+    let options: any;
+    switch (pickerType) {
+        case 'date':
+            options = {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+            };
+            break;
+        case 'time':
+            options = {
+                hour: 'numeric',
+                minute: 'numeric',
+            };
+            break;
+        case 'datetime':
+            options = {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+            };
+            break;
+    }
+    const [val, setVal] = React.useState(value ? new Date(value).toLocaleDateString('ru', options) : '');
+    const [state, setState] = React.useState({ hasLabel: !!value?.length, touched: false });
     React.useEffect(() => {
-        if (!!props.value?.length && !!props.value?.length === !state.hasLabel) {
-            setState({ hasLabel: !!props.value?.length, touched: true });
+        console.log(value);
+        setVal(value ? new Date(value).toLocaleDateString('ru', options) : '');
+        if (typeof value !== undefined && value && !!value === !state.hasLabel) {
+            setState({ hasLabel: !!value, touched: true });
         }
-    }, [props.value, state.hasLabel]);
+        if ((typeof value === undefined || !value) && state.hasLabel) {
+            setState({hasLabel: false, touched: true});
+        }
+    }, [value, state.hasLabel]);
     return (
         <div
             className={classNames(
@@ -22,7 +50,9 @@ const Field: React.FC<any> = ({ meta, placeholder, ...props }) => {
             )}
         >
             <input
+                value={val}
                 type={'text'}
+                readOnly={true}
                 className={'dp-input'}
                 onFocus={() => setState({ hasLabel: true, touched: false })}
                 onBlur={(e) => setState({ hasLabel: !!e.target.value?.length, touched: true })}
@@ -30,9 +60,6 @@ const Field: React.FC<any> = ({ meta, placeholder, ...props }) => {
             <label htmlFor={props.name} className={'dp-input-label'}>
                 {placeholder}
             </label>
-            <div className={'dp-input-icon'}>
-                <Icon id={calendar.id} viewBox={calendar.viewBox} />
-            </div>
             {meta && meta.error && state.touched && <div className={'dp-input-error'}>{meta.error}</div>}
         </div>
     );

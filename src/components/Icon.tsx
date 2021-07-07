@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-import './Icon.sass';
 
 interface IconProps {
     id: string;
