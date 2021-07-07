@@ -1,8 +1,9 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 module.exports = {
+  mode: "production",
   entry: {
-    index: "./src/index.js",
+    index: "./src/index.tsx",
   },
   output: {
     library: 'GridTable',
@@ -27,6 +28,13 @@ module.exports = {
           test: /\.(s(a|c)ss)$/,
           use: ['style-loader', 'css-loader', 'sass-loader']
       },
+      {
+        test: /\.svg$/,
+        use: [
+          'svg-sprite-loader',
+          'svgo-loader'
+        ]
+      }
     ]
   },
   plugins: [
