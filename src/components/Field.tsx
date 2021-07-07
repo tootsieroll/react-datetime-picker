@@ -33,7 +33,7 @@ const Field: React.FC<any> = ({ meta, placeholder, value, pickerType, ...props }
         } else {
             return new Date(value).toLocaleDateString('ru', options);
         }
-    }
+    };
     const [val, setVal] = React.useState(value ? dateToString(value) : '');
     const [state, setState] = React.useState({ hasLabel: !!value?.length, touched: false });
     React.useEffect(() => {

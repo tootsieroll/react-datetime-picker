@@ -49,13 +49,11 @@ const PickerGroup: React.FC<any> = ({ type, items, selected, onChange }) => {
     };
     const handleClick = (e: any) => {
         const el = e.target;
-        groupRef.current
-            .querySelector('.dt-picker-item--selected')
-            ?.classList.remove('dt-picker-item--selected');
+        groupRef.current.querySelector('.dt-picker-item--selected')?.classList.remove('dt-picker-item--selected');
         el.classList.add('dt-picker-item--selected');
         setCurrentPosition();
         onChange([type, el.textContent, [...el.parentNode.children].indexOf(el)]);
-    }
+    };
     let timeout: any = null;
     const handleWheel = (e: any) => {
         groupRef.current.scrollTop += e.deltaY;
@@ -73,7 +71,12 @@ const PickerGroup: React.FC<any> = ({ type, items, selected, onChange }) => {
     }, [groupRef, handleDragStop]);
     return (
         <div className={'dt-picker-group dt-picker-' + type} ref={groupRef}>
-            <div className={'dt-picker-scrollable'} onMouseDown={handleDragStart} onWheel={handleWheel} onClick={handleClick}>
+            <div
+                className={'dt-picker-scrollable'}
+                onMouseDown={handleDragStart}
+                onWheel={handleWheel}
+                onClick={handleClick}
+            >
                 {items.map((item: any, index: number) => (
                     <div
                         key={`item_${index}`}

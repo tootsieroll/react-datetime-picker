@@ -1,14 +1,17 @@
 {
   "name": "react-datetime-picker",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "simple datetime picker",
-  "main": "index.js",
+  "repository": "tootsieroll/react-datetime-picker",
+  "main": "dist/index.js",
+  "source": "src/index.tsx",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack serve",
-    "build": "cross-env NODE_ENV=production webpack",
-    "start": "serve dist",
-    "lint": "eslint src --ext .ts,.tsx",
-    "lint:fix": "npm run lint -- --fix"
+    "watch": "webpack -w",
+    "build": "webpack",
+    "test": ""
+  },
+  "engines": {
+    "node": ">=10"
   },
   "keywords": [
     "react",
@@ -16,9 +19,9 @@
     "datepicker",
     "timepicker"
   ],
-  "author": "Dina Islamova <dina.islamova1@gmail.com>",
+  "author": "Dina Islamova",
   "license": "MIT",
-  "dependencies": {
+  "peerDependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
@@ -32,8 +35,10 @@
     "@types/react-dom": "^17.0.8",
     "@types/svg-sprite-loader": "^3.9.4",
     "@typescript-eslint/eslint-plugin": "^4.28.1",
+    "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
     "classnames": "^2.3.1",
+    "clean-webpack-plugin": "^4.0.0-alpha.0",
     "cross-env": "^7.0.3",
     "css-loader": "^5.2.6",
     "eslint": "^7.26.0",
@@ -44,20 +49,19 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "html-webpack-plugin": "^5.3.2",
-    "mini-css-extract-plugin": "^2.0.0",
     "node-sass": "^6.0.1",
     "prettier": "^2.3.0",
     "sass": "^1.32.12",
     "sass-loader": "^12.1.0",
-    "serve": "^12.0.0",
     "style-loader": "^3.0.0",
     "svg-sprite-loader": "^6.0.9",
     "svgo-loader": "^3.0.0",
-    "terser-webpack-plugin": "^5.1.4",
     "typescript": "^4.3.5",
     "webpack": "^5.42.0",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.11.2"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }
