@@ -9,7 +9,8 @@ module.exports = {
     library: 'DateTimePicker',
     libraryTarget: 'umd',
     path: __dirname + '/dist',
-    filename: '[name].js'
+    filename: '[name].js',
+    globalObject: 'this',
   },
   module: {
     rules: [
