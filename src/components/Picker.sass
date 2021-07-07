@@ -1,0 +1,92 @@
+@import 'src/styles/variables'
+
+.dt-picker
+  position: relative
+  display: flex
+  justify-content: flex-start
+  align-items: flex-start
+  flex-flow: row nowrap
+  height: rem(200px)
+  &-box
+    position: absolute
+    top: 100%
+    left: 0
+    right: 0
+    background-color: $light
+    box-shadow: rem(0px 1px 3px) rgba(0, 0, 0, 0.1)
+    display: flex
+    justify-content: space-between
+    align-items: flex-start
+    flex-flow: row nowrap
+    padding: rem(16px)
+  &-selected
+    user-select: none
+    pointer-events: none
+    left: 0
+    right: 0
+    height: rem(38px)
+    position: absolute
+    top: 50%
+    transform: translate(0, -50%)
+    border-top: 1px solid #B7CAE0
+    border-bottom: 1px solid #B7CAE0
+    color: $black
+    +font-size(20px, 36px)
+    font-weight: 500
+    text-align: center
+    &:before,
+    &:after
+      content: ''
+      display: block
+      position: absolute
+      height: rem(100px)
+      left: 0
+      right: 0
+      z-index: 10
+      user-select: none
+      pointer-events: none
+    &:before
+      top: 50%
+      transform: translate(0, -100%)
+      background-image: linear-gradient($light 25%, transparent)
+    &:after
+      bottom: 50%
+      transform: translate(0, 100%)
+      background-image: linear-gradient(transparent, $light 75%)
+  &-group
+    position: relative
+    height: 100%
+    overflow: hidden
+    &:before,
+    &:after
+      content: ''
+      user-select: none
+      height: rem(96px)
+      width: 100%
+      display: block
+      position: relative
+  &-scrollable
+    touch-action: pan-y
+  &-item
+    user-select: none
+    text-align: center
+    padding: rem(4px 0)
+    +font-size(14px, 22px)
+    color: transparentize($gray, 0.3)
+    position: relative
+    cursor: pointer
+    transition: 0.4s cubic-bezier(0.25, 0.46, 0.33, 0.98)
+    &--selected
+      color: $black
+      +font-size(20px, 22px)
+      font-weight: 500
+  &-hours__item,
+  &-minutes__item
+    width: rem(33px)
+  &-days__item
+    width: rem(38px)
+  &-year__item
+    width: rem(60px)
+  &-month__item
+    min-width: rem(105px)
+    width: 100%

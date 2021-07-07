@@ -30,12 +30,13 @@ const config = {
                     [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'] :
                     ['style-loader', 'css-loader', 'sass-loader']
             },
-            {
-                test: /\.(woff|woff2|eot|ttf|svg)$/,
-                use: {
-                    loader: 'url-loader',
-                },
-            },
+          {
+              test: /\.svg$/,
+              use: [
+                  'svg-sprite-loader',
+                  'svgo-loader'
+              ]
+          }
         ],
     },
     plugins: [

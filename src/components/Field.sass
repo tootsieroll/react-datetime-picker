@@ -1,0 +1,104 @@
+@import 'src/styles/variables'
+
+.dp-input
+  appearance: none
+  border: none
+  background-color: transparent
+  border-radius: 0
+  box-shadow: none
+  font-family: $font-family-sans
+  padding: 0
+  margin: 0
+  height: rem(24px)
+  +font-size(16px, 24px)
+  width: 100%
+  display: block
+  color: $gray
+  text-align: left
+  position: relative
+  z-index: 2
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:focus-visible,
+  &:-webkit-autofill:focus-within,
+  &:-webkit-autofill:target,
+  &:-webkit-autofill:visited
+    border: 0
+    -webkit-text-fill-color: $gray
+    -webkit-box-shadow: 0 0 0 1000px $light inset
+    -webkit-transition: background-color 5000s ease-in-out 0s
+    caret-color: $gray
+    background-color: transparent!important
+  &:autofill,
+  &:autofill:hover,
+  &:autofill:focus,
+  &:autofill:focus-visible,
+  &:autofill:focus-within,
+  &:autofill:target,
+  &:autofill:visited
+    border: 0
+    color: $gray
+    box-shadow: none
+    caret-color: $gray
+    backface-visibility: hidden
+    filter: none!important
+    background-color: transparent!important
+    transition: background-color 5000s ease-in-out 0s
+  +placeholder()
+    color: transparentize($gray, 0.5)
+    +font-size(16px, 24px)
+  &-wrapper
+    display: inline-block
+    width: rem(300px)
+    position: relative
+    background: $light
+    border-radius: rem(4px)
+    height: rem(56px)
+    padding: rem(24px 16px 8px)
+    &--filled
+      box-shadow: inset 0px -1px 0px $gray
+      .dp-input-label
+        +font-size(12px, 16px)
+        top: rem(6px)
+    &.error
+      box-shadow: inset 0px -1px 0px $red
+    &.success
+      box-shadow: inset 0px -1px 0px $green
+  &-label
+    position: absolute
+    text-align: left
+    +font-size(16px, 22px)
+    color: transparentize($gray, 0.5)
+    top: rem(16px)
+    left: rem(16px)
+    right: rem(16px)
+    z-index: 1
+    transition: 120ms
+
+  &-error
+    position: absolute
+    color: $red
+    +font-size(12px, 12px)
+    left: rem(16px)
+    right: rem(16px)
+    bottom: rem(-4px)
+    transform: translate(0, 100%)
+    z-index: 3
+    .dp-input-label
+      color: $red
+  &-icon
+    width: rem(24px)
+    height: rem(24px)
+    position: absolute
+    z-index: 3
+    right: rem(16px)
+    top: rem(16px)
+    background-color: transparent
+    border: none
+    box-shadow: none
+    border-radius: 0
+    display: block
+    appearance: none
+    padding: 0
+    color: $gray
