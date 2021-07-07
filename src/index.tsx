@@ -7,7 +7,7 @@ import calendar from './images/calendar.svg';
 import clock from './images/clock.svg';
 import close from './images/close.svg';
 
-const DateTimePicker: React.FC<any> = ({ value, pickerType, placeholder, onChange, ...props }) => {
+const DateTimePicker: React.FC<any> = ({ value, pickerType, placeholder, onChange, className, ...props }) => {
     const [val, setVal] = React.useState(value);
     const [isOpen, setOpen] = React.useState(false);
     const pickers = pickerType === 'datetime' ? ['date', 'time'] : [pickerType];
@@ -24,11 +24,29 @@ const DateTimePicker: React.FC<any> = ({ value, pickerType, placeholder, onChang
                 break;
         }
     }
+    const disableScroll = () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+        window.onscroll = function() {
+            window.scrollTo(scrollLeft, scrollTop);
+        };
+    }
+    const enableScroll = () => {
+        window.onscroll = function() {};
+    }
+    React.useEffect(() => {
+        if (isOpen) {
+            disableScroll();
+        } else {
+            enableScroll();
+        }
+        return () => enableScroll();
+    }, [isOpen]);
     return (
-        <div className={'dt'}>
+        <div className={'dt ' + className}>
             <div className={'dt-input-box'} onClick={() => setOpen(true)}>
                 <Field {...props} value={val} pickerType={pickerType} placeholder={placeholder} />
-                <div className={'dp-input-icon'}>
+                <div className={'dt-input-icon'}>
                     {pickerType === 'time' ? (
                         <Icon id={clock.id} viewBox={clock.viewBox} />
                     ) : (
@@ -66,7 +84,7 @@ const DateTimePicker: React.FC<any> = ({ value, pickerType, placeholder, onChang
                                 Сбросить
                             </button>
                             <button
-                                className={'dt-picker-button dt-picker-button--green'}
+                                className={'dt-picker-button dt-picker-button--blue'}
                                 onClick={() => {
                                     setOpen(false);
                                     onChange(val);

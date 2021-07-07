@@ -17,9 +17,9 @@
     position: absolute
     top: 50%
     transform: translate(0, -50%)
-    border-top: 1px solid #B7CAE0
-    border-bottom: 1px solid #B7CAE0
-    color: $black
+    border-top: 1px solid var(--dt-selected-border)
+    border-bottom: 1px solid var(--dt-selected-border)
+    color: var(--dt-accent-text)
     +font-size(20px, 36px)
     font-weight: 500
     text-align: center
@@ -37,11 +37,11 @@
     &:before
       top: 50%
       transform: translate(0, -100%)
-      background-image: linear-gradient($light 25%, transparent)
+      background-image: linear-gradient(var(--dt-picker-bg) 25%, transparent)
     &:after
       bottom: 50%
       transform: translate(0, 100%)
-      background-image: linear-gradient(transparent, $light 75%)
+      background-image: linear-gradient(transparent, var(--dt-picker-bg) 75%)
   &-group
     position: relative
     height: 100%
@@ -61,12 +61,12 @@
     text-align: center
     padding: rem(4px 0)
     +font-size(14px, 22px)
-    color: transparentize($gray, 0.3)
+    color: var(--dt-picker-text)
     position: relative
     cursor: pointer
-    transition: 0.4s cubic-bezier(0.25, 0.46, 0.33, 0.98)
+    transition: 0.4s var(--dt-timing-function)
     &--selected
-      color: $black
+      color: var(--dt-accent-text)
       +font-size(20px, 22px)
       font-weight: 500
   &-hours__item,

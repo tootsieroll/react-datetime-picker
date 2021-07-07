@@ -73,16 +73,17 @@ $font-weight: (bold: 700, medium: 500, regular: 400, thin: 100)
   @if $size
     +font-size($size, $height)
 
-= optional-at-root($sel)
-  @at-root #{if(not &, $sel, selector-append(&, $sel))}
-    @content
-
-= placeholder
-  +optional-at-root('::-webkit-input-placeholder')
-    @content
-  +optional-at-root(':-moz-placeholder')
-    @content
-  +optional-at-root('::-moz-placeholder')
-    @content
-  +optional-at-root(':-ms-input-placeholder')
-    @content
+= color-scheme
+  --dt-picker-bg: #{$light}
+  --dt-text: #{$gray}
+  --dt-accent-text: #{$black}
+  --dt-picker-text: #{transparentize($gray, 0.3)}
+  --dt-button: #{$blue}
+  --dt-input-bg: #{$light}
+  --dt-input-border: #{$gray}
+  --dt-input-placeholder: #{transparentize($gray, 0.5)}
+  --dt-input-error: #{$red}
+  --dt-input-success: #{$green}
+  --dt-input-icon: #{$gray}
+  --dt-selected-border: #B7CAE0
+  --dt-timing-function: #{$base-timing-function}

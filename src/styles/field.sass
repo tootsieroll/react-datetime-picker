@@ -1,6 +1,6 @@
 @import 'variables'
 
-.dp-input
+.dt-input
   appearance: none
   border: none
   background-color: transparent
@@ -13,7 +13,7 @@
   +font-size(16px, 24px)
   width: 100%
   display: block
-  color: $gray
+  color: var(--dt-text)
   text-align: left
   position: relative
   z-index: 2
@@ -25,10 +25,10 @@
   &:-webkit-autofill:target,
   &:-webkit-autofill:visited
     border: 0
-    -webkit-text-fill-color: $gray
-    -webkit-box-shadow: 0 0 0 1000px $light inset
+    -webkit-text-fill-color: var(--dt-text)
+    -webkit-box-shadow: 0 0 0 1000px var(--dt-input-bg) inset
     -webkit-transition: background-color 5000s ease-in-out 0s
-    caret-color: $gray
+    caret-color: var(--dt-text)
     background-color: transparent!important
   &:autofill,
   &:autofill:hover,
@@ -38,38 +38,35 @@
   &:autofill:target,
   &:autofill:visited
     border: 0
-    color: $gray
+    color: var(--dt-text)
     box-shadow: none
-    caret-color: $gray
+    caret-color: var(--dt-text)
     backface-visibility: hidden
     filter: none!important
     background-color: transparent!important
     transition: background-color 5000s ease-in-out 0s
-  +placeholder()
-    color: transparentize($gray, 0.5)
-    +font-size(16px, 24px)
   &-wrapper
     display: inline-block
     width: rem(300px)
     position: relative
-    background: $light
+    background: var(--dt-input-bg)
     border-radius: rem(4px)
     height: rem(56px)
     padding: rem(24px 16px 8px)
     &--filled
-      box-shadow: inset 0px -1px 0px $gray
+      box-shadow: inset 0px -1px 0px var(--dt-input-border)
       .dp-input-label
         +font-size(12px, 16px)
         top: rem(6px)
     &.error
-      box-shadow: inset 0px -1px 0px $red
+      box-shadow: inset 0px -1px 0px var(--dt-input-error)
     &.success
-      box-shadow: inset 0px -1px 0px $green
+      box-shadow: inset 0px -1px 0px var(--dt-input-success)
   &-label
     position: absolute
     text-align: left
     +font-size(16px, 22px)
-    color: transparentize($gray, 0.5)
+    color: var(--dt-input-placeholder)
     top: rem(16px)
     left: rem(16px)
     right: rem(16px)
@@ -78,7 +75,7 @@
 
   &-error
     position: absolute
-    color: $red
+    color: var(--dt-input-error)
     +font-size(12px, 12px)
     left: rem(16px)
     right: rem(16px)
@@ -86,7 +83,7 @@
     transform: translate(0, 100%)
     z-index: 3
     .dp-input-label
-      color: $red
+      color: var(--dt-input-error)
   &-icon
     position: absolute
     z-index: 3
@@ -99,4 +96,4 @@
     display: block
     appearance: none
     padding: 0
-    color: $gray
+    color: var(--dt-input-icon)

@@ -48,8 +48,8 @@ const Field: React.FC<any> = ({ meta, placeholder, value, pickerType, ...props }
     return (
         <div
             className={classNames(
-                'dp-input-wrapper',
-                { 'dp-input-wrapper--filled': state.hasLabel },
+                'dt-input-wrapper',
+                { 'dt-input-wrapper--filled': state.hasLabel },
                 { error: meta && meta.error && state.touched },
                 { success: meta && !meta.error && !!props.value.length },
                 props.className
@@ -59,14 +59,14 @@ const Field: React.FC<any> = ({ meta, placeholder, value, pickerType, ...props }
                 value={val}
                 type={'text'}
                 readOnly={true}
-                className={'dp-input'}
+                className={'dt-input'}
                 onFocus={() => setState({ hasLabel: true, touched: false })}
                 onBlur={(e) => setState({ hasLabel: !!e.target.value?.length, touched: true })}
             />
-            <label htmlFor={props.name} className={'dp-input-label'}>
+            <label htmlFor={props.name} className={'dt-input-label'}>
                 {placeholder}
             </label>
-            {meta && meta.error && state.touched && <div className={'dp-input-error'}>{meta.error}</div>}
+            {meta && meta.error && state.touched && <div className={'dt-input-error'}>{meta.error}</div>}
         </div>
     );
 };

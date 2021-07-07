@@ -12,8 +12,8 @@ const Icon: React.FC<IconProps> = ({ id, viewBox, ...props }) => {
     return (
         <div
             className={classNames(
-                'dp-icon-svg',
-                props.name ? 'dp-icon-' + props.name : 'dp-icon-default',
+                'dt-icon-svg',
+                props.name ? 'dt-icon-' + props.name : 'dt-icon-default',
                 props.className
             )}
         >
