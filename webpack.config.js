@@ -6,7 +6,7 @@ module.exports = {
     index: "./src/index.tsx",
   },
   output: {
-    library: 'GridTable',
+    library: 'DateTimePicker',
     libraryTarget: 'umd',
     path: __dirname + '/dist',
     filename: '[name].js'
