@@ -27,16 +27,22 @@ const Field: React.FC<any> = ({ meta, placeholder, value, pickerType, ...props }
             };
             break;
     }
-    const [val, setVal] = React.useState(value ? new Date(value).toLocaleDateString('ru', options) : '');
+    const dateToString = (timestamp: number) => {
+        if (pickerType === 'time') {
+            return new Date(timestamp).toLocaleTimeString('ru', options);
+        } else {
+            return new Date(value).toLocaleDateString('ru', options);
+        }
+    }
+    const [val, setVal] = React.useState(value ? dateToString(value) : '');
     const [state, setState] = React.useState({ hasLabel: !!value?.length, touched: false });
     React.useEffect(() => {
-        console.log(value);
-        setVal(value ? new Date(value).toLocaleDateString('ru', options) : '');
+        setVal(value ? dateToString(value) : '');
         if (typeof value !== undefined && value && !!value === !state.hasLabel) {
             setState({ hasLabel: !!value, touched: true });
         }
         if ((typeof value === undefined || !value) && state.hasLabel) {
-            setState({hasLabel: false, touched: true});
+            setState({ hasLabel: false, touched: true });
         }
     }, [value, state.hasLabel]);
     return (

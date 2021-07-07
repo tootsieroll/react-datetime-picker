@@ -8,7 +8,7 @@ const App: React.FC = () => {
             <DateTimePicker
                 name={'datepicker'}
                 onChange={(value: any) => console.log(value)}
-                placeholder={'Выберите дату и время'}
+                pickerType={'datetime'}
             />
         </div>
     );
