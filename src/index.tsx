@@ -7,7 +7,7 @@ import calendar from './images/calendar.svg';
 import clock from './images/clock.svg';
 import close from './images/close.svg';
 
-const DateTimePicker: React.FC<any> = ({ value, pickerType, placeholder, onChange, className, ...props }) => {
+const DateTimePicker: React.FC<any> = ({ value, pickerType, placeholder, onChange, onClose, className, ...props }) => {
     const [val, setVal] = React.useState(value);
     const [isOpen, setOpen] = React.useState(false);
     const pickers = pickerType === 'datetime' ? ['date', 'time'] : [pickerType];
@@ -46,7 +46,12 @@ const DateTimePicker: React.FC<any> = ({ value, pickerType, placeholder, onChang
             {isOpen && (
                 <div className={'dt-picker-box'}>
                     <div className={'dt-picker-box__header'}>
-                        <div className={'dt-picker-close dt-input-icon'} onClick={() => setOpen(false)}>
+                        <div className={'dt-picker-close dt-input-icon'} onClick={() => {
+                            setOpen(false);
+                            if (typeof onClose === "function") {
+                                onClose();
+                            }
+                        }}>
                             <Icon id={close.id} viewBox={close.viewBox} name={'small'} />
                         </div>
                         <div className={'dt-picker-title'}>{placeholder}</div>
@@ -68,6 +73,9 @@ const DateTimePicker: React.FC<any> = ({ value, pickerType, placeholder, onChang
                                 onClick={() => {
                                     setVal(value);
                                     setOpen(false);
+                                    if (typeof onClose === "function") {
+                                        onClose();
+                                    }
                                 }}
                             >
                                 Сбросить
@@ -76,6 +84,9 @@ const DateTimePicker: React.FC<any> = ({ value, pickerType, placeholder, onChang
                                 className={'dt-picker-button dt-picker-button--blue'}
                                 onClick={() => {
                                     setOpen(false);
+                                    if (typeof onClose === "function") {
+                                        onClose();
+                                    }
                                     onChange(val);
                                 }}
                             >
