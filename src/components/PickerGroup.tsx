@@ -4,6 +4,7 @@ import classNames from 'classnames';
 const PickerGroup: React.FC<any> = ({ type, items, selected, onChange }) => {
     const groupRef = React.createRef<any>();
     const [isDragging, setDragging] = React.useState(null as any);
+    const [mouseMoving, setMouseMoving] = React.useState(false);
     const setCurrentPosition = () => {
         const select = groupRef.current?.querySelector('.dt-picker-item--selected');
         if (select) {
@@ -44,15 +45,23 @@ const PickerGroup: React.FC<any> = ({ type, items, selected, onChange }) => {
     };
     const handleDrag = (e: any) => {
         if (isDragging && groupRef.current) {
+            setMouseMoving(true);
+            let timeout;
+            (() => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => setMouseMoving(false), 50);
+            })();
             groupRef.current.scrollTop = isDragging.top - (e.clientY - isDragging.y);
         }
     };
     const handleClick = (e: any) => {
-        const el = e.target;
-        groupRef.current.querySelector('.dt-picker-item--selected')?.classList.remove('dt-picker-item--selected');
-        el.classList.add('dt-picker-item--selected');
-        setCurrentPosition();
-        onChange([type, el.textContent, [...el.parentNode.children].indexOf(el)]);
+        if (!mouseMoving) {
+            const el = e.target;
+            groupRef.current.querySelector('.dt-picker-item--selected')?.classList.remove('dt-picker-item--selected');
+            el.classList.add('dt-picker-item--selected');
+            setCurrentPosition();
+            onChange([type, el.textContent, [...el.parentNode.children].indexOf(el)]);
+        }
     };
     let timeout: any = null;
     const handleWheel = (e: any) => {
