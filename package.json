@@ -1,6 +1,6 @@
 {
   "name": "react-datetime-picker",
-  "version": "0.0.2-alpha",
+  "version": "0.0.3",
   "description": "simple datetime picker",
   "repository": "tootsieroll/react-datetime-picker",
   "main": "dist/index.js",
