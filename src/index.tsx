@@ -7,7 +7,7 @@ import calendar from './images/calendar.svg';
 import clock from './images/clock.svg';
 import close from './images/close.svg';
 
-const DateTimePicker: React.FC<any> = ({ value, pickerType, placeholder, onChange, onClose, className, ...props }) => {
+const DateTimePicker: React.FC<any> = ({ value, pickerType, placeholder, onChange, onClose, onOpen, className, ...props }) => {
     const [val, setVal] = React.useState(value);
     const [isOpen, setOpen] = React.useState(false);
     const pickers = pickerType === 'datetime' ? ['date', 'time'] : [pickerType];
@@ -33,7 +33,12 @@ const DateTimePicker: React.FC<any> = ({ value, pickerType, placeholder, onChang
     }, [isOpen]);
     return (
         <div className={'dt ' + className}>
-            <div className={'dt-input-box'} onClick={() => setOpen(true)}>
+            <div className={'dt-input-box'} onClick={() => {
+                setOpen(true);
+                if (typeof onOpen === "function") {
+                    onOpen();
+                }
+            }}>
                 <Field {...props} value={val} pickerType={pickerType} placeholder={placeholder} />
                 <div className={'dt-input-icon'}>
                     {pickerType === 'time' ? (
