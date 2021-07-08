@@ -44,7 +44,7 @@ const PickerGroup: React.FC<any> = ({ type, items, selected, onChange }) => {
     };
     const handleDrag = (e: any) => {
         if (isDragging && groupRef.current) {
-            groupRef.current.scrollTop = isDragging.top - (e.clientY - (isDragging.y + window.pageYOffset));
+            groupRef.current.scrollTop = isDragging.top - (e.clientY - isDragging.y);
         }
     };
     const handleClick = (e: any) => {
