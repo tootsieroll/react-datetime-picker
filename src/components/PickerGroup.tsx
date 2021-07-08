@@ -43,15 +43,16 @@ const PickerGroup: React.FC<any> = ({ type, items, selected, onChange }) => {
             onChange(result);
         }
     };
+    let moveTimeout: any = null;
     const handleDrag = (e: any) => {
-        if (isDragging && groupRef.current) {
+        clearTimeout(moveTimeout);
+        if (isDragging) {
             groupRef.current.scrollTop = isDragging.top - (e.clientY - isDragging.y);
             setMouseMoving(true);
-            let timeout;
-            (() => {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => setMouseMoving(false), 50);
-            })();
+            moveTimeout = setTimeout(() => {
+                setMouseMoving(false);
+                handleDragStop();
+            }, 200);
         }
     };
     const handleClick = (e: any) => {
@@ -65,17 +66,19 @@ const PickerGroup: React.FC<any> = ({ type, items, selected, onChange }) => {
     };
     let timeout: any = null;
     const handleWheel = (e: any) => {
-        groupRef.current.scrollTop += e.deltaY;
         clearTimeout(timeout);
-        timeout = setTimeout(() => handleDragStop(), 200);
+        if (!mouseMoving) {
+            groupRef.current.scrollTop += e.deltaY;
+            timeout = setTimeout(() => handleDragStop(), 200);
+        }
     };
     React.useEffect(() => {
         setCurrentPosition();
         document.addEventListener('mousemove', handleDrag);
-        document.addEventListener('mouseup', handleDragStop);
+        // document.addEventListener('mouseup', handleDragStop);
         return () => {
             document.removeEventListener('mousemove', handleDrag);
-            document.removeEventListener('mouseup', handleDragStop);
+            // document.removeEventListener('mouseup', handleDragStop);
         };
     }, [groupRef, handleDragStop]);
     return (
