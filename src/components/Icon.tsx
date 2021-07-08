@@ -13,7 +13,7 @@ const Icon: React.FC<IconProps> = ({ id, viewBox, ...props }) => {
             className={
                 'dt-icon-svg' +
                 (props.name ? ' dt-icon-' + props.name : ' dt-icon-default') +
-                props.className
+                (props.className ? ' ' + props.className : '')
             }
         >
             <svg viewBox={viewBox} fill={'currentColor'}>

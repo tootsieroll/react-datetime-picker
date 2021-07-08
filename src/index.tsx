@@ -32,7 +32,7 @@ const DateTimePicker: React.FC<any> = ({ value, pickerType, placeholder, onChang
         }
     }, [isOpen]);
     return (
-        <div className={'dt ' + className}>
+        <div className={'dt' + (className ? ' ' + className : '')}>
             <div className={'dt-input-box'} onClick={() => {
                 setOpen(true);
                 if (typeof onOpen === "function") {
