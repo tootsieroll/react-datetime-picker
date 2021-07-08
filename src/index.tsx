@@ -24,23 +24,12 @@ const DateTimePicker: React.FC<any> = ({ value, pickerType, placeholder, onChang
                 break;
         }
     }
-    const disableScroll = () => {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-        window.onscroll = function() {
-            window.scrollTo(scrollLeft, scrollTop);
-        };
-    }
-    const enableScroll = () => {
-        window.onscroll = function() {};
-    }
     React.useEffect(() => {
         if (isOpen) {
-            disableScroll();
+            document.body.classList.add('locked');
         } else {
-            enableScroll();
+            document.body.classList.remove('locked');
         }
-        return () => enableScroll();
     }, [isOpen]);
     return (
         <div className={'dt ' + className}>
