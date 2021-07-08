@@ -46,7 +46,7 @@ const DateTimePicker: React.FC<any> = ({ value, pickerType, placeholder, onChang
             {isOpen && (
                 <div className={'dt-picker-box'}>
                     <div className={'dt-picker-box__header'}>
-                        <div className={'dt-picker-close dp-input-icon'} onClick={() => setOpen(false)}>
+                        <div className={'dt-picker-close dt-input-icon'} onClick={() => setOpen(false)}>
                             <Icon id={close.id} viewBox={close.viewBox} name={'small'} />
                         </div>
                         <div className={'dt-picker-title'}>{placeholder}</div>
