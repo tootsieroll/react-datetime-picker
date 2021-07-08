@@ -1,5 +1,4 @@
 import React from 'react';
-import classNames from 'classnames';
 
 const Field: React.FC<any> = ({ meta, placeholder, value, pickerType, ...props }) => {
     let options: any;
@@ -47,13 +46,13 @@ const Field: React.FC<any> = ({ meta, placeholder, value, pickerType, ...props }
     }, [value, state.hasLabel]);
     return (
         <div
-            className={classNames(
-                'dt-input-wrapper',
-                { 'dt-input-wrapper--filled': state.hasLabel },
-                { error: meta && meta.error && state.touched },
-                { success: meta && !meta.error && !!props.value.length },
+            className={
+                'dt-input-wrapper' +
+                (state.hasLabel ? ' dt-input-wrapper--filled' : '') +
+                (meta && meta.error && state.touched ? ' error' : '') +
+                (meta && !meta.error && !!props.value.length ? ' success' : '') +
                 props.className
-            )}
+            }
         >
             <input
                 value={val}

@@ -1,5 +1,4 @@
 import React from 'react';
-import classNames from 'classnames';
 
 const PickerGroup: React.FC<any> = ({ type, items, selected, onChange }) => {
     const groupRef = React.createRef<any>();
@@ -93,9 +92,8 @@ const PickerGroup: React.FC<any> = ({ type, items, selected, onChange }) => {
                 {items.map((item: any, index: number) => (
                     <div
                         key={`item_${index}`}
-                        className={classNames(`dt-picker-item dt-picker-${type}__item`, {
-                            'dt-picker-item--selected': item === selected,
-                        })}
+                        className={`dt-picker-item dt-picker-${type}__item` +
+                                    (item === selected ? ' dt-picker-item--selected' : '')}
                     >
                         {item}
                     </div>
