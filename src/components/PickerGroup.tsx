@@ -45,13 +45,13 @@ const PickerGroup: React.FC<any> = ({ type, items, selected, onChange }) => {
     };
     const handleDrag = (e: any) => {
         if (isDragging && groupRef.current) {
+            groupRef.current.scrollTop = isDragging.top - (e.clientY - isDragging.y);
             setMouseMoving(true);
             let timeout;
             (() => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => setMouseMoving(false), 50);
             })();
-            groupRef.current.scrollTop = isDragging.top - (e.clientY - isDragging.y);
         }
     };
     const handleClick = (e: any) => {
