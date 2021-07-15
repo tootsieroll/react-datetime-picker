@@ -5,7 +5,7 @@
 
 **[Демо](https://tootsieroll.github.io/react-datetime-picker/)**
 
-<img src="/src/images/preview.png" alt="preview" width="50%"/>
+<img src="/src/images/preview.png" alt="preview" width="35%"/>
 
 [comment]: <> (![preview]&#40;/src/images/preview.png&#41;)
 
