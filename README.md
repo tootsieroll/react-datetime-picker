@@ -6,36 +6,33 @@
 **[Демо](https://tootsieroll.github.io/react-datetime-picker/)**
 
 <img src="/src/images/preview.png" alt="preview" width="35%"/>
+## Установка
 
-[comment]: <> (![preview]&#40;/src/images/preview.png&#41;)
+```bash
 
-[comment]: <> (## Установка)
+npm i @tootsieroll/react-datetime-picker
 
-[comment]: <> (```bash)
+```
 
-[comment]: <> (npm i @tootsieroll/react-datetime-picker)
+## Использование
 
-[comment]: <> (```)
+```TSX
 
-[comment]: <> (## Использование)
+import DateTimePicker from '@tootsieroll/react-datetime-picker';
 
-[comment]: <> (```TSX)
+..........
 
-[comment]: <> (import DateTimePicker from '@tootsieroll/react-datetime-picker';)
+<DateTimePicker 
 
-[comment]: <> (..........)
+    pickerType={'datetime'} 
 
-[comment]: <> (<DateTimePicker )
+    onChange={(value: any) => console.log(value)} 
 
-[comment]: <> (    pickerType={'datetime'} )
+/>
 
-[comment]: <> (    onChange={&#40;value: any&#41; => console.log&#40;value&#41;} )
+..........  
 
-[comment]: <> (/>)
-
-[comment]: <> (..........  )
-
-[comment]: <> (```)
+```
 
 ## Параметры
 
