@@ -5,7 +5,9 @@
 
 **[Демо](https://tootsieroll.github.io/react-datetime-picker/)**
 
-![Preview](/src/images/preview.png)
+<img src="/src/images/preview.png" alt="preview" width="50%"/>
+
+[comment]: <> (![preview]&#40;/src/images/preview.png&#41;)
 
 [comment]: <> (## Установка)
 
