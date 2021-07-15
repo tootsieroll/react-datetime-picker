@@ -6,6 +6,8 @@
 **[Демо](https://tootsieroll.github.io/react-datetime-picker/)**
 
 <img src="/src/images/preview.png" alt="preview" width="35%"/>
+
+
 ## Установка
 
 ```bash
