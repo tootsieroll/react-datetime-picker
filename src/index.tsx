@@ -24,13 +24,6 @@ const DateTimePicker: React.FC<any> = ({ value, pickerType, placeholder, onChang
                 break;
         }
     }
-    React.useEffect(() => {
-        if (isOpen) {
-            document.body.classList.add('locked');
-        } else {
-            document.body.classList.remove('locked');
-        }
-    }, [isOpen]);
     return (
         <div className={'dt' + (className ? ' ' + className : '')}>
             <div className={'dt-input-box'} onClick={() => {

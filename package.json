@@ -1,13 +1,16 @@
 {
   "name": "react-datetime-picker",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "simple datetime picker",
   "repository": "tootsieroll/react-datetime-picker",
   "main": "dist/index.js",
   "source": "src/index.tsx",
   "scripts": {
+    "start": "webpack serve --config demo/webpack.config.js",
     "watch": "webpack -w",
     "build": "webpack",
+    "build-demo": "webpack --config demo/webpack.config.js",
+    "deploy-demo": "gh-pages -d demo/ -r https://github.com/tootsieroll/react-datetime-picker.git",
     "test": ""
   },
   "engines": {
@@ -48,6 +51,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "gh-pages": "^3.2.3",
     "node-sass": "^6.0.1",
     "prettier": "^2.3.0",
     "sass": "^1.32.12",

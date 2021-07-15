@@ -17,7 +17,7 @@ const Icon: React.FC<IconProps> = ({ id, viewBox, ...props }) => {
             }
         >
             <svg viewBox={viewBox} fill={'currentColor'}>
-                <use xlinkHref={`#${id}`} />Í
+                <use xlinkHref={`#${id}`} />
             </svg>
         </div>
     );

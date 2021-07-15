@@ -3,7 +3,7 @@ import React from 'react';
 const PickerGroup: React.FC<any> = ({ type, items, selected, onChange }) => {
     const groupRef = React.createRef<any>();
     const [isDragging, setDragging] = React.useState(null as any);
-    const [mouseMoving, setMouseMoving] = React.useState(false);
+    const [isMouseMove, setMouseMove] = React.useState(false);
     const setCurrentPosition = () => {
         const select = groupRef.current?.querySelector('.dt-picker-item--selected');
         if (select) {
@@ -41,22 +41,20 @@ const PickerGroup: React.FC<any> = ({ type, items, selected, onChange }) => {
             if (result) {
                 onChange(result);
             }
+            if (isMouseMove) {
+                setTimeout(() => setMouseMove(false), 0);
+            }
         }
         setDragging(null);
     };
-    let moveTimeout: any = null;
     const handleDrag = (e: any) => {
-        clearTimeout(moveTimeout);
         if (isDragging && groupRef.current) {
             groupRef.current.scrollTop = isDragging.top - (e.clientY - isDragging.y);
-            setMouseMoving(true);
-            moveTimeout = setTimeout(() => {
-                setMouseMoving(false);
-            }, 200);
+            if (!isMouseMove) setMouseMove(true);
         }
     };
     const handleClick = (e: any) => {
-        if (!mouseMoving && groupRef.current) {
+        if (!isMouseMove && groupRef.current) {
             const el = e.target;
             groupRef.current.querySelector('.dt-picker-item--selected')?.classList.remove('dt-picker-item--selected');
             el.classList.add('dt-picker-item--selected');
@@ -67,7 +65,8 @@ const PickerGroup: React.FC<any> = ({ type, items, selected, onChange }) => {
     let timeout: any = null;
     const handleWheel = (e: any) => {
         clearTimeout(timeout);
-        if (!mouseMoving && groupRef.current) {
+        if (!isMouseMove && groupRef.current) {
+            e.stopPropagation();
             groupRef.current.scrollTop += e.deltaY;
             timeout = setTimeout(() => handleDragStop(), 200);
         }
@@ -84,7 +83,7 @@ const PickerGroup: React.FC<any> = ({ type, items, selected, onChange }) => {
     return (
         <div className={'dt-picker-group dt-picker-' + type} ref={groupRef}>
             <div
-                className={'dt-picker-scrollable'}
+                className={'dt-picker-scrollable' + isDragging ? ' dt-picker-onmousemove' : ''}
                 onMouseDown={handleDragStart}
                 onWheel={handleWheel}
                 onClick={handleClick}
