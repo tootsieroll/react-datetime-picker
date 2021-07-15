@@ -4,7 +4,8 @@
 node_modules
 
 # builds
-build
+bundle.js
+bundle.js.map
 /dist
 .rpt2_cache
 
