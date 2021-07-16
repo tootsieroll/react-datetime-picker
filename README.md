@@ -51,4 +51,4 @@ import DateTimePicker from '@tootsieroll/react-datetime-picker';
 
 ## Лицензия
 
-© [MIT](https://github.com/tootsieroll/react-datetime-picker/LICENSE)
+© [MIT](https://github.com/tootsieroll/react-datetime-picker/blob/master/LICENSE)
