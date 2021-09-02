@@ -107,7 +107,7 @@ var Field = function Field(_ref) {
     }
   }, [value, state.hasLabel]);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: 'dt-input-wrapper' + (state.hasLabel ? ' dt-input-wrapper--filled' : '') + (meta && meta.error && state.touched ? ' error' : '') + (meta && !meta.error && !!value.length ? ' success' : '') + (props.className ? ' ' + props.className : '')
+    className: 'dt-input-wrapper' + (state.hasLabel ? ' dt-input-wrapper--filled' : '') + (meta && meta.error && state.touched ? ' error' : '') + (meta && !meta.error && !!val.length ? ' success' : '') + (props.className ? ' ' + props.className : '')
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
     value: val,
     type: 'text',
