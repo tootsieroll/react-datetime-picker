@@ -50,7 +50,7 @@ const Field: React.FC<any> = ({ meta, placeholder, value, pickerType, ...props }
                 'dt-input-wrapper' +
                 (state.hasLabel ? ' dt-input-wrapper--filled' : '') +
                 (meta && meta.error && state.touched ? ' error' : '') +
-                (meta && !meta.error && !!props.value.length ? ' success' : '') +
+                (meta && !meta.error && !!value.length ? ' success' : '') +
                 (props.className ? ' ' + props.className : '')
             }
         >
