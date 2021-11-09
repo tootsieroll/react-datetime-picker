@@ -12,8 +12,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var _excluded = ["meta", "placeholder", "value", "pickerType"];
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -82,7 +80,7 @@ var Field = function Field(_ref) {
       setVal = _React$useState2[1];
 
   var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0__.useState({
-    hasLabel: !!(value !== null && value !== void 0 && value.length),
+    hasLabel: !!value,
     touched: false
   }),
       _React$useState4 = _slicedToArray(_React$useState3, 2),
@@ -91,23 +89,13 @@ var Field = function Field(_ref) {
 
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
     setVal(value ? dateToString(value) : '');
-
-    if (_typeof(value) !== undefined && value && !!value === !state.hasLabel) {
-      setState({
-        hasLabel: !!value,
-        touched: true
-      });
-    }
-
-    if ((_typeof(value) === undefined || !value) && state.hasLabel) {
-      setState({
-        hasLabel: false,
-        touched: true
-      });
-    }
+    if (!!value === !state.hasLabel) setState({
+      hasLabel: !!value,
+      touched: true
+    });
   }, [value, state.hasLabel]);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: 'dt-input-wrapper' + (state.hasLabel ? ' dt-input-wrapper--filled' : '') + (meta && meta.error && state.touched ? ' error' : '') + (meta && !meta.error && !!(val !== null && val !== void 0 && val.length) ? ' success' : '') + (props.className ? ' ' + props.className : '')
+    className: 'dt-input-wrapper' + (state.hasLabel ? ' dt-input-wrapper--filled' : '') + (meta && meta.error && state.touched ? ' error' : '') + (meta && !meta.error && !!val.length ? ' success' : '') + (props.className ? ' ' + props.className : '')
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
     value: val,
     type: 'text',
@@ -188,6 +176,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils */ "./src/utils/index.ts");
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -197,6 +197,8 @@ var Picker = function Picker(_ref) {
       timestamp = _ref$timestamp === void 0 ? new Date().getTime() : _ref$timestamp,
       _ref$type = _ref.type,
       type = _ref$type === void 0 ? 'date' : _ref$type,
+      startYear = _ref.startYear,
+      endYear = _ref.endYear,
       onChange = _ref.onChange;
   var month = new Date(timestamp).toLocaleDateString('ru', {
     month: 'long'
@@ -215,7 +217,7 @@ var Picker = function Picker(_ref) {
       })
     }, {
       type: 'year',
-      items: (0,_utils__WEBPACK_IMPORTED_MODULE_2__.getYearsList)(20),
+      items: (0,_utils__WEBPACK_IMPORTED_MODULE_2__.getYearsList)(startYear, endYear),
       selected: new Date(timestamp).toLocaleDateString('ru', {
         year: 'numeric'
       })
@@ -239,29 +241,36 @@ var Picker = function Picker(_ref) {
   var handleChange = function handleChange(result) {
     var returned = new Date(timestamp).getTime();
 
-    switch (result[0]) {
-      case 'month':
-        returned = new Date(timestamp).setMonth(result[2], new Date(timestamp).getDate());
-        break;
+    var _result = _slicedToArray(result, 3),
+        type = _result[0],
+        value = _result[1],
+        index = _result[2];
 
-      case 'year':
-        returned = new Date(timestamp).setFullYear(Number(result[1]), new Date(timestamp).getMonth(), new Date(timestamp).getDate());
-        break;
+    if (typeof index === 'number') {
+      switch (type) {
+        case 'month':
+          returned = new Date(timestamp).setMonth(index, new Date(timestamp).getDate());
+          break;
 
-      case 'days':
-        returned = new Date(timestamp).setDate(result[2] + 1);
-        break;
+        case 'year':
+          returned = new Date(timestamp).setFullYear(Number(value), new Date(timestamp).getMonth(), new Date(timestamp).getDate());
+          break;
 
-      case 'hours':
-        returned = new Date(timestamp).setHours(result[2]);
-        break;
+        case 'days':
+          returned = new Date(timestamp).setDate(index + 1);
+          break;
 
-      case 'minutes':
-        returned = new Date(timestamp).setMinutes(result[2]);
-        break;
+        case 'hours':
+          returned = new Date(timestamp).setHours(index);
+          break;
+
+        case 'minutes':
+          returned = new Date(timestamp).setMinutes(index);
+          break;
+      }
     }
 
-    onChange(returned);
+    if (typeof onChange === 'function') onChange(returned);
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
@@ -330,26 +339,27 @@ var PickerGroup = function PickerGroup(_ref) {
       setMouseMove = _React$useState4[1];
 
   var setCurrentPosition = function setCurrentPosition() {
-    var _groupRef$current;
+    if (groupRef.current) {
+      var _selected = groupRef.current.querySelector('.dt-picker-item--selected');
 
-    var select = (_groupRef$current = groupRef.current) === null || _groupRef$current === void 0 ? void 0 : _groupRef$current.querySelector('.dt-picker-item--selected');
-
-    if (select) {
-      select.scrollIntoView({
+      if (_selected) _selected.scrollIntoView({
         block: 'center'
       });
     }
   };
 
   var isInViewport = function isInViewport(el) {
+    if (!groupRef.current) return false;
     var rect = el.getBoundingClientRect();
     var view = groupRef.current.getBoundingClientRect();
     return rect.top >= view.y + view.height / 2 - 30 && rect.bottom <= view.y + view.height / 2 + 30;
   };
 
   var handleDragStart = function handleDragStart(e) {
-    setDragging({
-      top: groupRef.current.scrollTop,
+    var _groupRef$current;
+
+    return setDragging({
+      top: ((_groupRef$current = groupRef.current) === null || _groupRef$current === void 0 ? void 0 : _groupRef$current.scrollTop) || 0,
       y: e.clientY
     });
   };
@@ -365,7 +375,7 @@ var PickerGroup = function PickerGroup(_ref) {
 
           (_groupRef$current$que = groupRef.current.querySelector('.dt-picker-item--selected')) === null || _groupRef$current$que === void 0 ? void 0 : _groupRef$current$que.classList.remove('dt-picker-item--selected');
           arr[i].classList.add('dt-picker-item--selected');
-          result = [type, arr[i].textContent, i];
+          result = [type, arr[i].textContent || '', i];
           break;
         }
       }
@@ -373,16 +383,10 @@ var PickerGroup = function PickerGroup(_ref) {
       setTimeout(function () {
         return setCurrentPosition();
       }, 30);
-
-      if (result) {
-        onChange(result);
-      }
-
-      if (isMouseMove) {
-        setTimeout(function () {
-          return setMouseMove(false);
-        }, 0);
-      }
+      if (result) onChange(result);
+      if (isMouseMove) setTimeout(function () {
+        return setMouseMove(false);
+      }, 0);
     }
 
     setDragging(null);
@@ -410,7 +414,7 @@ var PickerGroup = function PickerGroup(_ref) {
   var timeout = null;
 
   var handleWheel = function handleWheel(e) {
-    clearTimeout(timeout);
+    if (timeout) clearTimeout(timeout);
 
     if (!isMouseMove && groupRef.current) {
       e.stopPropagation();
@@ -429,7 +433,7 @@ var PickerGroup = function PickerGroup(_ref) {
       document.removeEventListener('mousemove', handleDrag);
       document.removeEventListener('mouseup', handleDragStop);
     };
-  }, [groupRef, handleDragStop]);
+  }, [groupRef.current, handleDragStop]);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: 'dt-picker-group dt-picker-' + type,
     ref: groupRef
@@ -466,7 +470,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _images_calendar_svg__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./images/calendar.svg */ "./src/images/calendar.svg");
 /* harmony import */ var _images_clock_svg__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./images/clock.svg */ "./src/images/clock.svg");
 /* harmony import */ var _images_close_svg__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./images/close.svg */ "./src/images/close.svg");
-var _excluded = ["value", "pickerType", "placeholder", "onChange", "onClose", "onOpen", "className"];
+var _excluded = ["value", "pickerType", "placeholder", "onChange", "onClose", "onOpen", "className", "meta", "startYear", "endYear"];
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -503,9 +507,12 @@ var DateTimePicker = function DateTimePicker(_ref) {
       onClose = _ref.onClose,
       onOpen = _ref.onOpen,
       className = _ref.className,
+      meta = _ref.meta,
+      startYear = _ref.startYear,
+      endYear = _ref.endYear,
       props = _objectWithoutProperties(_ref, _excluded);
 
-  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(value),
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(value || new Date().getTime()),
       _React$useState2 = _slicedToArray(_React$useState, 2),
       val = _React$useState2[0],
       setVal = _React$useState2[1];
@@ -516,6 +523,8 @@ var DateTimePicker = function DateTimePicker(_ref) {
       setOpen = _React$useState4[1];
 
   var pickers = pickerType === 'datetime' ? ['date', 'time'] : [pickerType];
+  var start = startYear === 'current' ? new Date().getFullYear() : startYear;
+  var end = endYear === 'current' ? new Date().getFullYear() : endYear;
 
   if (!placeholder) {
     switch (pickerType) {
@@ -533,23 +542,33 @@ var DateTimePicker = function DateTimePicker(_ref) {
     }
   }
 
+  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
+    if (startYear && startYear !== 'current' && startYear > new Date().getFullYear()) {
+      var date = new Date(val).setFullYear(startYear);
+      setVal(date);
+    }
+
+    if (endYear && endYear !== 'current' && endYear < new Date().getFullYear()) {
+      var _date = new Date(val).setFullYear(endYear);
+
+      setVal(_date);
+    }
+  }, [startYear, endYear]);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: 'dt' + (className ? ' ' + className : '')
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: 'dt-input-box',
     onClick: function onClick() {
       setOpen(true);
-
-      if (typeof onOpen === "function") {
-        onOpen();
-      }
+      if (typeof onOpen === 'function') onOpen();
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_Field__WEBPACK_IMPORTED_MODULE_1__.default, _extends({}, props, {
+    meta: meta,
     value: val,
     pickerType: pickerType,
     placeholder: placeholder
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: 'dt-input-icon'
+    className: 'dt-input-icon' + (meta && meta.error ? ' dt-input-icon--error' : '') + (meta && !meta.error && !!val ? ' dt-input-icon--success' : '')
   }, pickerType === 'time' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_Icon__WEBPACK_IMPORTED_MODULE_3__.default, {
     id: _images_clock_svg__WEBPACK_IMPORTED_MODULE_6__.default.id,
     viewBox: _images_clock_svg__WEBPACK_IMPORTED_MODULE_6__.default.viewBox
@@ -564,10 +583,7 @@ var DateTimePicker = function DateTimePicker(_ref) {
     className: 'dt-picker-close dt-input-icon',
     onClick: function onClick() {
       setOpen(false);
-
-      if (typeof onClose === "function") {
-        onClose();
-      }
+      if (typeof onClose === 'function') onClose();
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_Icon__WEBPACK_IMPORTED_MODULE_3__.default, {
     id: _images_close_svg__WEBPACK_IMPORTED_MODULE_7__.default.id,
@@ -584,7 +600,9 @@ var DateTimePicker = function DateTimePicker(_ref) {
       timestamp: val,
       onChange: function onChange(res) {
         return setVal(res);
-      }
+      },
+      startYear: start,
+      endYear: end
     });
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: 'dt-picker-box__footer'
@@ -600,22 +618,15 @@ var DateTimePicker = function DateTimePicker(_ref) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
     className: 'dt-picker-button',
     onClick: function onClick() {
-      setVal(value);
+      setVal(value || new Date().getTime());
       setOpen(false);
-
-      if (typeof onClose === "function") {
-        onClose();
-      }
+      if (typeof onClose === 'function') onClose();
     }
   }, "\u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
     className: 'dt-picker-button dt-picker-button--blue',
     onClick: function onClick() {
       setOpen(false);
-
-      if (typeof onClose === "function") {
-        onClose();
-      }
-
+      if (typeof onClose === 'function') onClose();
       onChange(val);
     }
   }, "\u0413\u043E\u0442\u043E\u0432\u043E")))));
@@ -640,13 +651,39 @@ DateTimePicker.defaultProps = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getYearsList": function() { return /* binding */ getYearsList; },
 /* harmony export */   "getMonthLength": function() { return /* binding */ getMonthLength; },
 /* harmony export */   "getMonthList": function() { return /* binding */ getMonthList; },
 /* harmony export */   "getDaysOfMonth": function() { return /* binding */ getDaysOfMonth; },
-/* harmony export */   "getYearsList": function() { return /* binding */ getYearsList; },
 /* harmony export */   "getHoursList": function() { return /* binding */ getHoursList; },
 /* harmony export */   "getMinutesList": function() { return /* binding */ getMinutesList; }
 /* harmony export */ });
+var getYearsList = function getYearsList(startYear, endYear) {
+  var now = new Date().getFullYear();
+  var period = 20,
+      d = 0.5;
+
+  if (startYear && endYear) {
+    period = endYear - startYear;
+    if (endYear === now) d = 1;else if (now === startYear) d = 0;else d = (period - (endYear - now)) / period;
+  }
+
+  if (startYear && !endYear) {
+    period = now - startYear + 10;
+    if (now === startYear) d = 0;else d = (period - 10) / period;
+  }
+
+  if (!startYear && endYear) {
+    period = endYear - now + 10;
+    if (endYear === now) d = 1;else d = (period - (endYear - now)) / period;
+  }
+
+  return Array.from({
+    length: period + 1
+  }, function (e, i) {
+    if (d) return String(now - period * d + i);else return String(now + i);
+  });
+};
 var getMonthLength = function getMonthLength(timestamp) {
   var year = new Date(timestamp).getFullYear();
   var month = new Date(timestamp).getMonth();
@@ -670,14 +707,6 @@ var getDaysOfMonth = function getDaysOfMonth(timestamp) {
     return new Date(0, 0, i + 1).toLocaleDateString('ru', {
       day: '2-digit'
     });
-  });
-};
-var getYearsList = function getYearsList() {
-  var period = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 20;
-  return Array.from({
-    length: period
-  }, function (e, i) {
-    return String(new Date().getFullYear() - period / 2 + i);
   });
 };
 var getHoursList = function getHoursList() {
@@ -743,7 +772,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ":root {\n  --dt-picker-bg: #F3F8FF;\n  --dt-text: #303946;\n  --dt-accent-text: #192331;\n  --dt-picker-text: rgba(48, 57, 70, 0.7);\n  --dt-button: #0044C8;\n  --dt-input-bg: #F3F8FF;\n  --dt-input-border: #303946;\n  --dt-input-placeholder: rgba(48, 57, 70, 0.5);\n  --dt-input-error: #ea1e43;\n  --dt-input-success: #09D780;\n  --dt-input-icon: #303946;\n  --dt-selected-border: #B7CAE0;\n  --dt-timing-function: cubic-bezier(0.25, 0.46, 0.33, 0.98);\n}\n\n.dt {\n  margin-bottom: 2.5rem;\n  color: var(--dt-accent-text);\n  text-align: left;\n}\n\n.dt, .dt * {\n  box-sizing: border-box;\n}\n\n.dt,\n.dt-input-box {\n  display: inline-block;\n  position: relative;\n}\n\n.dt-picker-box {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  background-color: var(--dt-picker-bg);\n  box-shadow: 0rem 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1);\n  padding: 1rem;\n  z-index: 10;\n}\n.dt-picker-box__content {\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-start;\n  flex-flow: row nowrap;\n}\n.dt-picker-box__footer {\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  flex-flow: row wrap;\n}\n.dt-picker-box__footer_right .dt-picker-button:first-child {\n  margin-right: 0.25rem;\n}\n.dt-picker-title {\n  font-size: 1rem;\n  line-height: 1.375;\n  color: var(--dt-text);\n}\n.dt-picker-button {\n  appearance: none;\n  border-radius: 0.25rem;\n  background-color: transparent;\n  box-shadow: none;\n  color: var(--dt-text);\n  border: 0.0625rem solid;\n  transition: 80ms;\n  font-family: \"Inter\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  cursor: pointer;\n  display: inline-block;\n  width: auto;\n  margin: 0 0 0.25rem;\n  padding: 0.25rem 0.375rem;\n}\n.dt-picker-button--blue {\n  color: var(--dt-button);\n}\n\n.dt-icon-svg {\n  font-size: 0;\n  line-height: 0;\n  display: inline-block;\n}\n\n.dt-icon-default > svg {\n  width: 1.5rem;\n  height: 1.5rem;\n}\n\n.dt-icon-small > svg {\n  width: 1rem;\n  height: 1rem;\n}\n\n.dt-input {\n  appearance: none;\n  border: none;\n  background-color: transparent;\n  border-radius: 0;\n  box-shadow: none;\n  font-family: \"Inter\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  padding: 0;\n  margin: 0;\n  height: 1.5rem;\n  font-size: 1rem;\n  line-height: 1.5;\n  width: 100%;\n  display: block;\n  color: var(--dt-text);\n  text-align: left;\n  position: relative;\n  z-index: 2;\n}\n.dt-input:-webkit-autofill, .dt-input:-webkit-autofill:hover, .dt-input:-webkit-autofill:focus, .dt-input:-webkit-autofill:focus-visible, .dt-input:-webkit-autofill:focus-within, .dt-input:-webkit-autofill:target, .dt-input:-webkit-autofill:visited {\n  border: 0;\n  -webkit-text-fill-color: var(--dt-text);\n  -webkit-box-shadow: 0 0 0 1000px var(--dt-input-bg) inset;\n  -webkit-transition: background-color 5000s ease-in-out 0s;\n  caret-color: var(--dt-text);\n  background-color: transparent !important;\n}\n.dt-input:autofill, .dt-input:autofill:hover, .dt-input:autofill:focus, .dt-input:autofill:focus-visible, .dt-input:autofill:focus-within, .dt-input:autofill:target, .dt-input:autofill:visited {\n  border: 0;\n  color: var(--dt-text);\n  box-shadow: none;\n  caret-color: var(--dt-text);\n  backface-visibility: hidden;\n  filter: none !important;\n  background-color: transparent !important;\n  transition: background-color 5000s ease-in-out 0s;\n}\n.dt-input-wrapper {\n  display: inline-block;\n  width: 18.75rem;\n  position: relative;\n  background: var(--dt-input-bg);\n  border-radius: 0.25rem;\n  height: 3.5rem;\n  padding: 1.5rem 1rem 0.5rem;\n}\n.dt-input-wrapper--filled {\n  box-shadow: inset 0px -1px 0px var(--dt-input-border);\n}\n.dt-input-wrapper--filled .dt-input-label {\n  font-size: 0.75rem;\n  line-height: 1.3333333333;\n  top: 0.375rem;\n}\n.dt-input-wrapper.error {\n  box-shadow: inset 0px -1px 0px var(--dt-input-error);\n}\n.dt-input-wrapper.success {\n  box-shadow: inset 0px -1px 0px var(--dt-input-success);\n}\n.dt-input-label {\n  position: absolute;\n  text-align: left;\n  font-size: 1rem;\n  line-height: 1.375;\n  color: var(--dt-input-placeholder);\n  top: 1rem;\n  left: 1rem;\n  right: 1rem;\n  z-index: 1;\n  transition: 120ms;\n}\n.dt-input-error {\n  position: absolute;\n  color: var(--dt-input-error);\n  font-size: 0.75rem;\n  line-height: 1;\n  left: 1rem;\n  right: 1rem;\n  bottom: -0.25rem;\n  transform: translate(0, 100%);\n  z-index: 3;\n}\n.dt-input-error .dt-input-label {\n  color: var(--dt-input-error);\n}\n.dt-input-icon {\n  position: absolute;\n  z-index: 3;\n  right: 1rem;\n  top: 1rem;\n  background-color: transparent;\n  border: none;\n  box-shadow: none;\n  border-radius: 0;\n  display: block;\n  appearance: none;\n  padding: 0;\n  color: var(--dt-input-icon);\n}\n\n.dt-picker {\n  position: relative;\n  display: flex;\n  justify-content: center;\n  align-items: flex-start;\n  flex-flow: row nowrap;\n  height: 12.5rem;\n  flex: 1;\n}\n.dt-picker-selected {\n  user-select: none;\n  pointer-events: none;\n  left: 0;\n  right: 0;\n  height: 2.375rem;\n  position: absolute;\n  top: 50%;\n  transform: translate(0, -50%);\n  border-top: 1px solid var(--dt-selected-border);\n  border-bottom: 1px solid var(--dt-selected-border);\n  color: var(--dt-accent-text);\n  font-size: 1.25rem;\n  line-height: 1.8;\n  font-weight: 500;\n  text-align: center;\n}\n.dt-picker-selected:before {\n  content: \"\";\n  display: block;\n  position: absolute;\n  height: 6.25rem;\n  left: 0;\n  right: 0;\n  z-index: 10;\n  user-select: none;\n  pointer-events: none;\n  top: 50%;\n  transform: translate(0, -100%);\n  background-image: linear-gradient(var(--dt-picker-bg) 25%, transparent);\n}\n.dt-picker-selected:after {\n  content: \"\";\n  display: block;\n  position: absolute;\n  height: 6.25rem;\n  left: 0;\n  right: 0;\n  z-index: 10;\n  user-select: none;\n  pointer-events: none;\n  bottom: 50%;\n  transform: translate(0, 100%);\n  background-image: linear-gradient(transparent, var(--dt-picker-bg) 75%);\n}\n.dt-picker-group {\n  position: relative;\n  height: 100%;\n  overflow: hidden;\n}\n.dt-picker-group:before, .dt-picker-group:after {\n  content: \"\";\n  user-select: none;\n  height: 6rem;\n  width: 100%;\n  display: block;\n  position: relative;\n}\n.dt-picker-scrollable {\n  touch-action: pan-y;\n}\n.dt-picker-item {\n  user-select: none;\n  text-align: center;\n  padding: 0.25rem 0;\n  font-size: 0.875rem;\n  line-height: 1.5714285714;\n  color: var(--dt-picker-text);\n  position: relative;\n  cursor: pointer;\n  transition: 0.4s var(--dt-timing-function);\n}\n.dt-picker-item--selected {\n  color: var(--dt-accent-text);\n  font-size: 1.25rem;\n  line-height: 1.1;\n  font-weight: 500;\n}\n.dt-picker-hours__item, .dt-picker-minutes__item {\n  width: 2.0625rem;\n}\n.dt-picker-days__item {\n  width: 2.375rem;\n}\n.dt-picker-year__item {\n  width: 3.75rem;\n}\n.dt-picker-month__item {\n  min-width: 6.5625rem;\n  width: 100%;\n}", "",{"version":3,"sources":["webpack://./src/styles/dt.sass","webpack://./src/styles/_variables.sass","webpack://./src/styles/icon.sass","webpack://./src/styles/field.sass","webpack://./src/styles/picker.sass"],"names":[],"mappings":"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","sourcesContent":["@import 'variables'\n\\:root\n  +color-scheme\n.dt\n  margin-bottom: rem(40px)\n  color: var(--dt-accent-text)\n  text-align: left\n.dt, .dt *\n  box-sizing: border-box\n.dt,\n.dt-input-box\n  display: inline-block\n  position: relative\n.dt-picker\n  &-box\n    position: absolute\n    top: 0\n    left: 0\n    right: 0\n    background-color: var(--dt-picker-bg)\n    box-shadow: rem(0px 1px 3px) rgba(0, 0, 0, 0.1)\n    padding: rem(16px)\n    z-index: 10\n    &__content\n      display: flex\n      justify-content: space-between\n      align-items: flex-start\n      flex-flow: row nowrap\n    &__footer\n      width: 100%\n      display: flex\n      justify-content: space-between\n      align-items: center\n      flex-flow: row wrap\n      &_right .dt-picker-button:first-child\n        margin-right: rem(4px)\n\n  &-title\n    +font-size(16px, 22px)\n    color: var(--dt-text)\n  &-button\n    appearance: none\n    border-radius: rem(4px)\n    background-color: transparent\n    box-shadow: none\n    color: var(--dt-text)\n    border: rem(1px) solid\n    transition: 80ms\n    font-family: $font-family-sans\n    cursor: pointer\n    display: inline-block\n    width: auto\n    margin: 0 0 rem(4px)\n    padding: rem(4px 6px)\n    &--blue\n      color: var(--dt-button)\n\n\n@import \"icon\"\n@import \"field\"\n@import \"picker\"\n","// color-scheme\n$white: #FFFFFF\n$gray: #303946\n$blue: #0044C8\n$green: #09D780\n$red: #ea1e43\n$black: #192331\n$light: #F3F8FF\n\n// animation settings\n$base-timing-function: cubic-bezier(0.25, 0.46, 0.33, 0.98)\n$base-duration:        700ms\n\n// fonts settings\n$font-family-sans: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif\n$font-family-serif: TimesNewRoman, serif\n\n$font-size-base:    16px\n$line-height-base:  24px\n\n$bold:     700\n$medium:   500\n$normal:   400\n$thin:     100\n\n$font-weight: (bold: 700, medium: 500, regular: 400, thin: 100)\n\n@use \"sass:math\"\n\n@use \"sass:list\"\n@use \"sass:map\"\n\n@function rem($sizes)\n  $result: null\n  @if list.length($sizes) >= 1\n    $value: list.nth($sizes, 1)\n    @if $value != 0 and $value != auto\n      $remSize: math.div($value, $font-size-base)\n      $result: #{$remSize}rem\n    @else\n      $result: $value\n  @if list.length($sizes) >= 2\n    $value: list.nth($sizes, 2)\n    @if $value != 0 and $value != auto\n      $remSize: math.div($value, $font-size-base)\n      $result: list.append($result, #{$remSize}rem)\n    @else\n      $result: list.append($result, $value)\n  @if list.length($sizes) >= 3\n    $value: list.nth($sizes, 3)\n    @if $value != 0 and $value != auto\n      $remSize: math.div($value, $font-size-base)\n      $result: list.append($result, #{$remSize}rem)\n    @else\n      $result: list.append($result, $value)\n  @if list.length($sizes) >= 4\n    $value: list.nth($sizes, 4)\n    @if $value != 0 and $value != auto\n      $remSize: math.div($value, $font-size-base)\n      $result: list.append($result, #{$remSize}rem)\n    @else\n      $result: list.append($result, $value)\n  @return $result\n\n\n\n= font-size($font-size: $font-size-base, $line-height: $line-height-base)\n  font-size: rem($font-size)\n  line-height: math.div($line-height, $font-size)\n\n= font($weight, $size: $font-size-base, $height: $line-height-base)\n  font-weight: map.get($font-weight, $weight)\n  @if $size\n    +font-size($size, $height)\n\n= color-scheme\n  --dt-picker-bg: #{$light}\n  --dt-text: #{$gray}\n  --dt-accent-text: #{$black}\n  --dt-picker-text: #{transparentize($gray, 0.3)}\n  --dt-button: #{$blue}\n  --dt-input-bg: #{$light}\n  --dt-input-border: #{$gray}\n  --dt-input-placeholder: #{transparentize($gray, 0.5)}\n  --dt-input-error: #{$red}\n  --dt-input-success: #{$green}\n  --dt-input-icon: #{$gray}\n  --dt-selected-border: #B7CAE0\n  --dt-timing-function: #{$base-timing-function}\n","@import 'variables'\n\n.dt-icon-svg\n  font-size: 0\n  line-height: 0\n  display: inline-block\n\n.dt-icon-default > svg\n  width: rem(24px)\n  height: rem(24px)\n\n.dt-icon-small > svg\n  width: rem(16px)\n  height: rem(16px)\n\n","@import 'variables'\n\n.dt-input\n  appearance: none\n  border: none\n  background-color: transparent\n  border-radius: 0\n  box-shadow: none\n  font-family: $font-family-sans\n  padding: 0\n  margin: 0\n  height: rem(24px)\n  +font-size(16px, 24px)\n  width: 100%\n  display: block\n  color: var(--dt-text)\n  text-align: left\n  position: relative\n  z-index: 2\n  &:-webkit-autofill,\n  &:-webkit-autofill:hover,\n  &:-webkit-autofill:focus,\n  &:-webkit-autofill:focus-visible,\n  &:-webkit-autofill:focus-within,\n  &:-webkit-autofill:target,\n  &:-webkit-autofill:visited\n    border: 0\n    -webkit-text-fill-color: var(--dt-text)\n    -webkit-box-shadow: 0 0 0 1000px var(--dt-input-bg) inset\n    -webkit-transition: background-color 5000s ease-in-out 0s\n    caret-color: var(--dt-text)\n    background-color: transparent!important\n  &:autofill,\n  &:autofill:hover,\n  &:autofill:focus,\n  &:autofill:focus-visible,\n  &:autofill:focus-within,\n  &:autofill:target,\n  &:autofill:visited\n    border: 0\n    color: var(--dt-text)\n    box-shadow: none\n    caret-color: var(--dt-text)\n    backface-visibility: hidden\n    filter: none!important\n    background-color: transparent!important\n    transition: background-color 5000s ease-in-out 0s\n  &-wrapper\n    display: inline-block\n    width: rem(300px)\n    position: relative\n    background: var(--dt-input-bg)\n    border-radius: rem(4px)\n    height: rem(56px)\n    padding: rem(24px 16px 8px)\n    &--filled\n      box-shadow: inset 0px -1px 0px var(--dt-input-border)\n      .dt-input-label\n        +font-size(12px, 16px)\n        top: rem(6px)\n    &.error\n      box-shadow: inset 0px -1px 0px var(--dt-input-error)\n    &.success\n      box-shadow: inset 0px -1px 0px var(--dt-input-success)\n  &-label\n    position: absolute\n    text-align: left\n    +font-size(16px, 22px)\n    color: var(--dt-input-placeholder)\n    top: rem(16px)\n    left: rem(16px)\n    right: rem(16px)\n    z-index: 1\n    transition: 120ms\n\n  &-error\n    position: absolute\n    color: var(--dt-input-error)\n    +font-size(12px, 12px)\n    left: rem(16px)\n    right: rem(16px)\n    bottom: rem(-4px)\n    transform: translate(0, 100%)\n    z-index: 3\n    .dt-input-label\n      color: var(--dt-input-error)\n  &-icon\n    position: absolute\n    z-index: 3\n    right: rem(16px)\n    top: rem(16px)\n    background-color: transparent\n    border: none\n    box-shadow: none\n    border-radius: 0\n    display: block\n    appearance: none\n    padding: 0\n    color: var(--dt-input-icon)\n","@import 'variables'\n\n.dt-picker\n  position: relative\n  display: flex\n  justify-content: center\n  align-items: flex-start\n  flex-flow: row nowrap\n  height: rem(200px)\n  flex: 1\n  &-selected\n    user-select: none\n    pointer-events: none\n    left: 0\n    right: 0\n    height: rem(38px)\n    position: absolute\n    top: 50%\n    transform: translate(0, -50%)\n    border-top: 1px solid var(--dt-selected-border)\n    border-bottom: 1px solid var(--dt-selected-border)\n    color: var(--dt-accent-text)\n    +font-size(20px, 36px)\n    font-weight: 500\n    text-align: center\n    &:before\n      content: ''\n      display: block\n      position: absolute\n      height: rem(100px)\n      left: 0\n      right: 0\n      z-index: 10\n      user-select: none\n      pointer-events: none\n      top: 50%\n      transform: translate(0, -100%)\n      background-image: linear-gradient(var(--dt-picker-bg) 25%, transparent)\n    &:after\n      content: ''\n      display: block\n      position: absolute\n      height: rem(100px)\n      left: 0\n      right: 0\n      z-index: 10\n      user-select: none\n      pointer-events: none\n      bottom: 50%\n      transform: translate(0, 100%)\n      background-image: linear-gradient(transparent, var(--dt-picker-bg) 75%)\n  &-group\n    position: relative\n    height: 100%\n    overflow: hidden\n    &:before,\n    &:after\n      content: ''\n      user-select: none\n      height: rem(96px)\n      width: 100%\n      display: block\n      position: relative\n  &-scrollable\n    touch-action: pan-y\n  &-item\n    user-select: none\n    text-align: center\n    padding: rem(4px 0)\n    +font-size(14px, 22px)\n    color: var(--dt-picker-text)\n    position: relative\n    cursor: pointer\n    transition: 0.4s var(--dt-timing-function)\n    &--selected\n      color: var(--dt-accent-text)\n      +font-size(20px, 22px)\n      font-weight: 500\n  &-hours__item,\n  &-minutes__item\n    width: rem(33px)\n  &-days__item\n    width: rem(38px)\n  &-year__item\n    width: rem(60px)\n  &-month__item\n    min-width: rem(105px)\n    width: 100%\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ":root {\n  --dt-picker-bg: #F3F8FF;\n  --dt-text: #303946;\n  --dt-accent-text: #192331;\n  --dt-picker-text: rgba(48, 57, 70, 0.7);\n  --dt-button: #0044C8;\n  --dt-input-bg: #F3F8FF;\n  --dt-input-border: #303946;\n  --dt-input-placeholder: rgba(48, 57, 70, 0.5);\n  --dt-input-error: #ea1e43;\n  --dt-input-success: #09D780;\n  --dt-input-icon: #303946;\n  --dt-selected-border: #B7CAE0;\n  --dt-timing-function: cubic-bezier(0.25, 0.46, 0.33, 0.98);\n}\n\n.dt {\n  margin-bottom: 2.5rem;\n  color: var(--dt-accent-text);\n  text-align: left;\n}\n\n.dt, .dt * {\n  box-sizing: border-box;\n}\n\n.dt,\n.dt-input-box {\n  display: inline-block;\n  position: relative;\n}\n\n.dt-picker-box {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  background-color: var(--dt-picker-bg);\n  box-shadow: 0rem 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1);\n  padding: 1rem;\n  z-index: 10;\n}\n.dt-picker-box__content {\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-start;\n  flex-flow: row nowrap;\n}\n.dt-picker-box__footer {\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  flex-flow: row wrap;\n}\n.dt-picker-box__footer_right .dt-picker-button:first-child {\n  margin-right: 0.25rem;\n}\n.dt-picker-title {\n  font-size: 1rem;\n  line-height: 1.375;\n  color: var(--dt-text);\n}\n.dt-picker-button {\n  appearance: none;\n  border-radius: 0.25rem;\n  background-color: transparent;\n  box-shadow: none;\n  color: var(--dt-text);\n  border: 0.0625rem solid;\n  transition: 80ms;\n  font-family: \"Inter\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  cursor: pointer;\n  display: inline-block;\n  width: auto;\n  margin: 0 0 0.25rem;\n  padding: 0.25rem 0.375rem;\n}\n.dt-picker-button--blue {\n  color: var(--dt-button);\n}\n\n.dt-icon-svg {\n  font-size: 0;\n  line-height: 0;\n  display: inline-block;\n}\n\n.dt-icon-default > svg {\n  width: 1.5rem;\n  height: 1.5rem;\n}\n\n.dt-icon-small > svg {\n  width: 1rem;\n  height: 1rem;\n}\n\n.dt-input {\n  appearance: none;\n  border: none;\n  background-color: transparent;\n  border-radius: 0;\n  box-shadow: none;\n  font-family: \"Inter\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  padding: 0;\n  margin: 0;\n  height: 1.5rem;\n  font-size: 1rem;\n  line-height: 1.5;\n  width: 100%;\n  display: block;\n  color: var(--dt-text);\n  text-align: left;\n  position: relative;\n  z-index: 2;\n}\n.dt-input:-webkit-autofill, .dt-input:-webkit-autofill:hover, .dt-input:-webkit-autofill:focus, .dt-input:-webkit-autofill:focus-visible, .dt-input:-webkit-autofill:focus-within, .dt-input:-webkit-autofill:target, .dt-input:-webkit-autofill:visited {\n  border: 0;\n  -webkit-text-fill-color: var(--dt-text);\n  -webkit-box-shadow: 0 0 0 1000px var(--dt-input-bg) inset;\n  -webkit-transition: background-color 5000s ease-in-out 0s;\n  caret-color: var(--dt-text);\n  background-color: transparent !important;\n}\n.dt-input:autofill, .dt-input:autofill:hover, .dt-input:autofill:focus, .dt-input:autofill:focus-visible, .dt-input:autofill:focus-within, .dt-input:autofill:target, .dt-input:autofill:visited {\n  border: 0;\n  color: var(--dt-text);\n  box-shadow: none;\n  caret-color: var(--dt-text);\n  backface-visibility: hidden;\n  filter: none !important;\n  background-color: transparent !important;\n  transition: background-color 5000s ease-in-out 0s;\n}\n.dt-input-wrapper {\n  display: inline-block;\n  width: 18.75rem;\n  position: relative;\n  background: var(--dt-input-bg);\n  border-radius: 0.25rem;\n  height: 3.5rem;\n  padding: 1.5rem 1rem 0.5rem;\n}\n.dt-input-wrapper--filled {\n  box-shadow: inset 0px -1px 0px var(--dt-input-border);\n}\n.dt-input-wrapper--filled .dt-input-label {\n  font-size: 0.75rem;\n  line-height: 1.3333333333;\n  top: 0.375rem;\n}\n.dt-input-wrapper.error {\n  box-shadow: inset 0px -1px 0px var(--dt-input-error);\n}\n.dt-input-wrapper.success {\n  box-shadow: inset 0px -1px 0px var(--dt-input-success);\n}\n.dt-input-label {\n  position: absolute;\n  text-align: left;\n  font-size: 1rem;\n  line-height: 1.375;\n  color: var(--dt-input-placeholder);\n  top: 1rem;\n  left: 1rem;\n  right: 1rem;\n  z-index: 1;\n  transition: 120ms;\n}\n.dt-input-error {\n  position: absolute;\n  color: var(--dt-input-error);\n  font-size: 0.75rem;\n  line-height: 1;\n  left: 1rem;\n  right: 1rem;\n  bottom: -0.25rem;\n  transform: translate(0, 100%);\n  z-index: 3;\n}\n.dt-input-error .dt-input-label {\n  color: var(--dt-input-error);\n}\n.dt-input-icon {\n  position: absolute;\n  z-index: 3;\n  right: 1rem;\n  top: 1rem;\n  background-color: transparent;\n  border: none;\n  box-shadow: none;\n  border-radius: 0;\n  display: block;\n  appearance: none;\n  padding: 0;\n  color: var(--dt-input-icon);\n}\n.dt-input-icon--success {\n  color: var(--dt-input-success);\n}\n.dt-input-icon--error {\n  color: var(--dt-input-error);\n}\n\n.dt-picker {\n  position: relative;\n  display: flex;\n  justify-content: center;\n  align-items: flex-start;\n  flex-flow: row nowrap;\n  height: 12.5rem;\n  flex: 1;\n}\n.dt-picker-selected {\n  user-select: none;\n  pointer-events: none;\n  left: 0;\n  right: 0;\n  height: 2.375rem;\n  position: absolute;\n  top: 50%;\n  transform: translate(0, -50%);\n  border-top: 1px solid var(--dt-selected-border);\n  border-bottom: 1px solid var(--dt-selected-border);\n  color: var(--dt-accent-text);\n  font-size: 1.25rem;\n  line-height: 1.8;\n  font-weight: 500;\n  text-align: center;\n}\n.dt-picker-selected:before {\n  content: \"\";\n  display: block;\n  position: absolute;\n  height: 6.25rem;\n  left: 0;\n  right: 0;\n  z-index: 10;\n  user-select: none;\n  pointer-events: none;\n  top: 50%;\n  transform: translate(0, -100%);\n  background-image: linear-gradient(var(--dt-picker-bg) 25%, transparent);\n}\n.dt-picker-selected:after {\n  content: \"\";\n  display: block;\n  position: absolute;\n  height: 6.25rem;\n  left: 0;\n  right: 0;\n  z-index: 10;\n  user-select: none;\n  pointer-events: none;\n  bottom: 50%;\n  transform: translate(0, 100%);\n  background-image: linear-gradient(transparent, var(--dt-picker-bg) 75%);\n}\n.dt-picker-group {\n  position: relative;\n  height: 100%;\n  overflow: hidden;\n}\n.dt-picker-group:before, .dt-picker-group:after {\n  content: \"\";\n  user-select: none;\n  height: 6rem;\n  width: 100%;\n  display: block;\n  position: relative;\n}\n.dt-picker-scrollable {\n  touch-action: pan-y;\n}\n.dt-picker-item {\n  user-select: none;\n  text-align: center;\n  padding: 0.25rem 0;\n  font-size: 0.875rem;\n  line-height: 1.5714285714;\n  color: var(--dt-picker-text);\n  position: relative;\n  cursor: pointer;\n  transition: 0.4s var(--dt-timing-function);\n}\n.dt-picker-item--selected {\n  color: var(--dt-accent-text);\n  font-size: 1.25rem;\n  line-height: 1.1;\n  font-weight: 500;\n}\n.dt-picker-hours__item, .dt-picker-minutes__item {\n  width: 2.0625rem;\n}\n.dt-picker-days__item {\n  width: 2.375rem;\n}\n.dt-picker-year__item {\n  width: 3.75rem;\n}\n.dt-picker-month__item {\n  min-width: 6.5625rem;\n  width: 100%;\n}", "",{"version":3,"sources":["webpack://./src/styles/dt.sass","webpack://./src/styles/_variables.sass","webpack://./src/styles/icon.sass","webpack://./src/styles/field.sass","webpack://./src/styles/picker.sass"],"names":[],"mappings":"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","sourcesContent":["@import 'variables'\n\\:root\n  +color-scheme\n.dt\n  margin-bottom: rem(40px)\n  color: var(--dt-accent-text)\n  text-align: left\n.dt, .dt *\n  box-sizing: border-box\n.dt,\n.dt-input-box\n  display: inline-block\n  position: relative\n.dt-picker\n  &-box\n    position: absolute\n    top: 0\n    left: 0\n    right: 0\n    background-color: var(--dt-picker-bg)\n    box-shadow: rem(0px 1px 3px) rgba(0, 0, 0, 0.1)\n    padding: rem(16px)\n    z-index: 10\n    &__content\n      display: flex\n      justify-content: space-between\n      align-items: flex-start\n      flex-flow: row nowrap\n    &__footer\n      width: 100%\n      display: flex\n      justify-content: space-between\n      align-items: center\n      flex-flow: row wrap\n      &_right .dt-picker-button:first-child\n        margin-right: rem(4px)\n\n  &-title\n    +font-size(16px, 22px)\n    color: var(--dt-text)\n  &-button\n    appearance: none\n    border-radius: rem(4px)\n    background-color: transparent\n    box-shadow: none\n    color: var(--dt-text)\n    border: rem(1px) solid\n    transition: 80ms\n    font-family: $font-family-sans\n    cursor: pointer\n    display: inline-block\n    width: auto\n    margin: 0 0 rem(4px)\n    padding: rem(4px 6px)\n    &--blue\n      color: var(--dt-button)\n\n\n@import \"icon\"\n@import \"field\"\n@import \"picker\"\n","// color-scheme\n$white: #FFFFFF\n$gray: #303946\n$blue: #0044C8\n$green: #09D780\n$red: #ea1e43\n$black: #192331\n$light: #F3F8FF\n\n// animation settings\n$base-timing-function: cubic-bezier(0.25, 0.46, 0.33, 0.98)\n$base-duration:        700ms\n\n// fonts settings\n$font-family-sans: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif\n$font-family-serif: TimesNewRoman, serif\n\n$font-size-base:    16px\n$line-height-base:  24px\n\n$bold:     700\n$medium:   500\n$normal:   400\n$thin:     100\n\n$font-weight: (bold: 700, medium: 500, regular: 400, thin: 100)\n\n@use \"sass:math\"\n\n@use \"sass:list\"\n@use \"sass:map\"\n\n@function rem($sizes)\n  $result: null\n  @if list.length($sizes) >= 1\n    $value: list.nth($sizes, 1)\n    @if $value != 0 and $value != auto\n      $remSize: math.div($value, $font-size-base)\n      $result: #{$remSize}rem\n    @else\n      $result: $value\n  @if list.length($sizes) >= 2\n    $value: list.nth($sizes, 2)\n    @if $value != 0 and $value != auto\n      $remSize: math.div($value, $font-size-base)\n      $result: list.append($result, #{$remSize}rem)\n    @else\n      $result: list.append($result, $value)\n  @if list.length($sizes) >= 3\n    $value: list.nth($sizes, 3)\n    @if $value != 0 and $value != auto\n      $remSize: math.div($value, $font-size-base)\n      $result: list.append($result, #{$remSize}rem)\n    @else\n      $result: list.append($result, $value)\n  @if list.length($sizes) >= 4\n    $value: list.nth($sizes, 4)\n    @if $value != 0 and $value != auto\n      $remSize: math.div($value, $font-size-base)\n      $result: list.append($result, #{$remSize}rem)\n    @else\n      $result: list.append($result, $value)\n  @return $result\n\n\n\n= font-size($font-size: $font-size-base, $line-height: $line-height-base)\n  font-size: rem($font-size)\n  line-height: math.div($line-height, $font-size)\n\n= font($weight, $size: $font-size-base, $height: $line-height-base)\n  font-weight: map.get($font-weight, $weight)\n  @if $size\n    +font-size($size, $height)\n\n= color-scheme\n  --dt-picker-bg: #{$light}\n  --dt-text: #{$gray}\n  --dt-accent-text: #{$black}\n  --dt-picker-text: #{transparentize($gray, 0.3)}\n  --dt-button: #{$blue}\n  --dt-input-bg: #{$light}\n  --dt-input-border: #{$gray}\n  --dt-input-placeholder: #{transparentize($gray, 0.5)}\n  --dt-input-error: #{$red}\n  --dt-input-success: #{$green}\n  --dt-input-icon: #{$gray}\n  --dt-selected-border: #B7CAE0\n  --dt-timing-function: #{$base-timing-function}\n","@import 'variables'\n\n.dt-icon-svg\n  font-size: 0\n  line-height: 0\n  display: inline-block\n\n.dt-icon-default > svg\n  width: rem(24px)\n  height: rem(24px)\n\n.dt-icon-small > svg\n  width: rem(16px)\n  height: rem(16px)\n\n","@import 'variables'\n\n.dt-input\n  appearance: none\n  border: none\n  background-color: transparent\n  border-radius: 0\n  box-shadow: none\n  font-family: $font-family-sans\n  padding: 0\n  margin: 0\n  height: rem(24px)\n  +font-size(16px, 24px)\n  width: 100%\n  display: block\n  color: var(--dt-text)\n  text-align: left\n  position: relative\n  z-index: 2\n  &:-webkit-autofill,\n  &:-webkit-autofill:hover,\n  &:-webkit-autofill:focus,\n  &:-webkit-autofill:focus-visible,\n  &:-webkit-autofill:focus-within,\n  &:-webkit-autofill:target,\n  &:-webkit-autofill:visited\n    border: 0\n    -webkit-text-fill-color: var(--dt-text)\n    -webkit-box-shadow: 0 0 0 1000px var(--dt-input-bg) inset\n    -webkit-transition: background-color 5000s ease-in-out 0s\n    caret-color: var(--dt-text)\n    background-color: transparent!important\n  &:autofill,\n  &:autofill:hover,\n  &:autofill:focus,\n  &:autofill:focus-visible,\n  &:autofill:focus-within,\n  &:autofill:target,\n  &:autofill:visited\n    border: 0\n    color: var(--dt-text)\n    box-shadow: none\n    caret-color: var(--dt-text)\n    backface-visibility: hidden\n    filter: none!important\n    background-color: transparent!important\n    transition: background-color 5000s ease-in-out 0s\n  &-wrapper\n    display: inline-block\n    width: rem(300px)\n    position: relative\n    background: var(--dt-input-bg)\n    border-radius: rem(4px)\n    height: rem(56px)\n    padding: rem(24px 16px 8px)\n    &--filled\n      box-shadow: inset 0px -1px 0px var(--dt-input-border)\n      .dt-input-label\n        +font-size(12px, 16px)\n        top: rem(6px)\n    &.error\n      box-shadow: inset 0px -1px 0px var(--dt-input-error)\n    &.success\n      box-shadow: inset 0px -1px 0px var(--dt-input-success)\n  &-label\n    position: absolute\n    text-align: left\n    +font-size(16px, 22px)\n    color: var(--dt-input-placeholder)\n    top: rem(16px)\n    left: rem(16px)\n    right: rem(16px)\n    z-index: 1\n    transition: 120ms\n\n  &-error\n    position: absolute\n    color: var(--dt-input-error)\n    +font-size(12px, 12px)\n    left: rem(16px)\n    right: rem(16px)\n    bottom: rem(-4px)\n    transform: translate(0, 100%)\n    z-index: 3\n    .dt-input-label\n      color: var(--dt-input-error)\n  &-icon\n    position: absolute\n    z-index: 3\n    right: rem(16px)\n    top: rem(16px)\n    background-color: transparent\n    border: none\n    box-shadow: none\n    border-radius: 0\n    display: block\n    appearance: none\n    padding: 0\n    color: var(--dt-input-icon)\n    &--success\n      color: var(--dt-input-success)\n    &--error\n      color: var(--dt-input-error)\n\n","@import 'variables'\n\n.dt-picker\n  position: relative\n  display: flex\n  justify-content: center\n  align-items: flex-start\n  flex-flow: row nowrap\n  height: rem(200px)\n  flex: 1\n  &-selected\n    user-select: none\n    pointer-events: none\n    left: 0\n    right: 0\n    height: rem(38px)\n    position: absolute\n    top: 50%\n    transform: translate(0, -50%)\n    border-top: 1px solid var(--dt-selected-border)\n    border-bottom: 1px solid var(--dt-selected-border)\n    color: var(--dt-accent-text)\n    +font-size(20px, 36px)\n    font-weight: 500\n    text-align: center\n    &:before\n      content: ''\n      display: block\n      position: absolute\n      height: rem(100px)\n      left: 0\n      right: 0\n      z-index: 10\n      user-select: none\n      pointer-events: none\n      top: 50%\n      transform: translate(0, -100%)\n      background-image: linear-gradient(var(--dt-picker-bg) 25%, transparent)\n    &:after\n      content: ''\n      display: block\n      position: absolute\n      height: rem(100px)\n      left: 0\n      right: 0\n      z-index: 10\n      user-select: none\n      pointer-events: none\n      bottom: 50%\n      transform: translate(0, 100%)\n      background-image: linear-gradient(transparent, var(--dt-picker-bg) 75%)\n  &-group\n    position: relative\n    height: 100%\n    overflow: hidden\n    &:before,\n    &:after\n      content: ''\n      user-select: none\n      height: rem(96px)\n      width: 100%\n      display: block\n      position: relative\n  &-scrollable\n    touch-action: pan-y\n  &-item\n    user-select: none\n    text-align: center\n    padding: rem(4px 0)\n    +font-size(14px, 22px)\n    color: var(--dt-picker-text)\n    position: relative\n    cursor: pointer\n    transition: 0.4s var(--dt-timing-function)\n    &--selected\n      color: var(--dt-accent-text)\n      +font-size(20px, 22px)\n      font-weight: 500\n  &-hours__item,\n  &-minutes__item\n    width: rem(33px)\n  &-days__item\n    width: rem(38px)\n  &-year__item\n    width: rem(60px)\n  &-month__item\n    min-width: rem(105px)\n    width: 100%\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ __webpack_exports__["default"] = (___CSS_LOADER_EXPORT___);
 
@@ -32531,7 +32560,9 @@ var DemoPage = function DemoPage() {
     pickerType: 'date',
     onChange: function onChange(value) {
       return console.log(value);
-    }
+    },
+    startYear: 2005,
+    endYear: 2009
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_src__WEBPACK_IMPORTED_MODULE_2__.default, {
     pickerType: 'time',
     onChange: function onChange(value) {
