@@ -52,11 +52,11 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
         }
     }
     React.useEffect(() => {
-        if (startYear && startYear !== 'current' && startYear > new Date().getFullYear()) {
+        if (startYear && startYear !== 'current' && startYear > new Date(val).getFullYear()) {
             const date = new Date(val).setFullYear(startYear);
             setVal(date);
         }
-        if (endYear && endYear !== 'current' && endYear < new Date().getFullYear()) {
+        if (endYear && endYear !== 'current' && endYear < new Date(val).getFullYear()) {
             const date = new Date(val).setFullYear(endYear);
             setVal(date);
         }
