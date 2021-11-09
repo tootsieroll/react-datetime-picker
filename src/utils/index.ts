@@ -1,3 +1,28 @@
+export const getYearsList = (startYear: number | undefined, endYear: number | undefined): string[] => {
+    const now = new Date().getFullYear();
+    let period = 20,
+        d = 0.5;
+    if (startYear && endYear) {
+        period = endYear - startYear;
+        if (endYear === now) d = 1;
+        else if (now === startYear) d = 0;
+        else d = (period - (endYear - now)) / period;
+    }
+    if (startYear && !endYear) {
+        period = now - startYear + 10;
+        if (now === startYear) d = 0;
+        else d = (period - 10) / period;
+    }
+    if (!startYear && endYear) {
+        period = endYear - now + 10;
+        if (endYear === now) d = 1;
+        else d = (period - (endYear - now)) / period;
+    }
+    return Array.from({ length: period + 1 }, (e, i) => {
+        if (d) return String(now - period * d + i);
+        else return String(now + i);
+    });
+};
 export const getMonthLength = (timestamp: number): number => {
     const year = new Date(timestamp).getFullYear();
     const month = new Date(timestamp).getMonth();
@@ -13,11 +38,6 @@ export const getMonthList = (): string[] => {
 export const getDaysOfMonth = (timestamp: number): string[] => {
     return Array.from({ length: getMonthLength(timestamp) }, (e, i) => {
         return new Date(0, 0, i + 1).toLocaleDateString('ru', { day: '2-digit' });
-    });
-};
-export const getYearsList = (period = 20): string[] => {
-    return Array.from({ length: period }, (e, i) => {
-        return String(new Date().getFullYear() - period / 2 + i);
     });
 };
 export const getHoursList = (): string[] => {

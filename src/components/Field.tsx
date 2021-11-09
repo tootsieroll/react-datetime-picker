@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { InputHTMLAttributes } from 'react';
 
-const Field: React.FC<any> = ({ meta, placeholder, value, pickerType, ...props }) => {
+interface FieldProps extends InputHTMLAttributes<HTMLInputElement> {
+    value: number;
+    pickerType: 'date' | 'time' | 'datetime';
+    placeholder: string;
+    meta?: { [k: string]: string | null };
+}
+
+const Field: React.FC<FieldProps> = ({ meta, placeholder, value, pickerType, ...props }) => {
     let options: any;
     switch (pickerType) {
         case 'date':
@@ -33,16 +40,11 @@ const Field: React.FC<any> = ({ meta, placeholder, value, pickerType, ...props }
             return new Date(value).toLocaleDateString('ru', options);
         }
     };
-    const [val, setVal] = React.useState(value ? dateToString(value) : '');
-    const [state, setState] = React.useState({ hasLabel: !!value?.length, touched: false });
+    const [val, setVal] = React.useState<string>(value ? dateToString(value) : '');
+    const [state, setState] = React.useState<any>({ hasLabel: !!value, touched: false });
     React.useEffect(() => {
         setVal(value ? dateToString(value) : '');
-        if (typeof value !== undefined && value && !!value === !state.hasLabel) {
-            setState({ hasLabel: !!value, touched: true });
-        }
-        if ((typeof value === undefined || !value) && state.hasLabel) {
-            setState({ hasLabel: false, touched: true });
-        }
+        if (!!value === !state.hasLabel) setState({ hasLabel: !!value, touched: true });
     }, [value, state.hasLabel]);
     return (
         <div
@@ -50,7 +52,7 @@ const Field: React.FC<any> = ({ meta, placeholder, value, pickerType, ...props }
                 'dt-input-wrapper' +
                 (state.hasLabel ? ' dt-input-wrapper--filled' : '') +
                 (meta && meta.error && state.touched ? ' error' : '') +
-                (meta && !meta.error && !!val?.length ? ' success' : '') +
+                (meta && !meta.error && !!val.length ? ' success' : '') +
                 (props.className ? ' ' + props.className : '')
             }
         >
