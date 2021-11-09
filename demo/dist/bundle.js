@@ -543,12 +543,12 @@ var DateTimePicker = function DateTimePicker(_ref) {
   }
 
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
-    if (startYear && startYear !== 'current' && startYear > new Date().getFullYear()) {
+    if (startYear && startYear !== 'current' && startYear > new Date(val).getFullYear()) {
       var date = new Date(val).setFullYear(startYear);
       setVal(date);
     }
 
-    if (endYear && endYear !== 'current' && endYear < new Date().getFullYear()) {
+    if (endYear && endYear !== 'current' && endYear < new Date(val).getFullYear()) {
       var _date = new Date(val).setFullYear(endYear);
 
       setVal(_date);
