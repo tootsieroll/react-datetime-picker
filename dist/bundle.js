@@ -659,13 +659,11 @@ var DateTimePicker = function DateTimePicker(_ref) {
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
     if (ref && ref.current) {
       if (isOpen) {
-        var _ref$current$parentNo;
-
-        var l = (0,_utils__WEBPACK_IMPORTED_MODULE_6__.getScrollableParent)((_ref$current$parentNo = ref.current.parentNode) === null || _ref$current$parentNo === void 0 ? void 0 : _ref$current$parentNo.parentNode);
-        if (l) l.style.overflow = 'hidden';
+        var l = (0,_utils__WEBPACK_IMPORTED_MODULE_6__.getScrollableParent)(ref.current.parentNode);
+        if (l) l.style.overflowY = 'hidden';
         setLocked(l);
       } else {
-        if (locked) locked.style.overflow = '';
+        if (locked) locked.style.overflowY = 'auto';
         setLocked(null);
       }
     }
