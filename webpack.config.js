@@ -10,7 +10,7 @@ module.exports = {
     libraryTarget: 'umd',
     path: __dirname + '/dist',
     filename: '[name].js',
-    globalObject: 'this',
+    globalObject: 'window',
   },
   module: {
     rules: [
