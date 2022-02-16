@@ -64,11 +64,11 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
     React.useEffect(() => {
         if (ref && ref.current) {
             if (isOpen) {
-                const l = getScrollableParent(ref.current.parentNode?.parentNode);
-                if (l) l.style.overflow = 'hidden';
+                const l = getScrollableParent(ref.current.parentNode as HTMLElement);
+                if (l) l.style.overflowY = 'hidden';
                 setLocked(l);
             } else {
-                if (locked) locked.style.overflow = '';
+                if (locked) locked.style.overflowY = 'auto';
                 setLocked(null);
             }
         }
