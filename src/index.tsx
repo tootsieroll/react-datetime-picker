@@ -1,11 +1,11 @@
 import React, { InputHTMLAttributes } from 'react';
 import Field from './components/Field';
-import Picker from './components/Picker';
 import Icon from './components/Icon';
 import './styles/dt.sass';
 import calendar from './images/calendar.svg';
 import clock from './images/clock.svg';
-import close from './images/close.svg';
+import { getScrollParent } from './utils';
+import PickerBox from './components/PickerBox';
 
 interface DateTimePickerProps extends InputHTMLAttributes<HTMLInputElement> {
     value?: number;
@@ -16,8 +16,8 @@ interface DateTimePickerProps extends InputHTMLAttributes<HTMLInputElement> {
     startYear?: number | 'current';
     endYear?: number | 'current';
     onChange: (v: any) => void;
-    onClose?: () => void;
-    onOpen?: () => void;
+    onClose?: (v: any) => void;
+    onOpen?: (v: any) => void;
 }
 
 const DateTimePicker: React.FC<DateTimePickerProps> = ({
@@ -33,11 +33,9 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
     endYear,
     ...props
 }) => {
-    const [val, setVal] = React.useState<number>(value || new Date().getTime());
+    const [val, setVal] = React.useState<number | undefined>(value);
     const [isOpen, setOpen] = React.useState<boolean>(false);
-    const pickers: Array<'date' | 'time'> = pickerType === 'datetime' ? ['date', 'time'] : [pickerType];
-    const start = startYear === 'current' ? new Date().getFullYear() : startYear;
-    const end = endYear === 'current' ? new Date().getFullYear() : endYear;
+    const ref = React.useRef<HTMLDivElement>(null);
     if (!placeholder) {
         switch (pickerType) {
             case 'date':
@@ -51,25 +49,33 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
                 break;
         }
     }
+    const handleClose = (applyChanges?: boolean) => {
+        setOpen(false);
+        if (typeof onClose === 'function') onClose(ref.current);
+        if (applyChanges && typeof onChange === 'function') onChange(val);
+    };
+    const handleOpen = () => {
+        setOpen(true);
+        if (typeof onOpen === 'function') onOpen(ref.current);
+    };
+    const handleChange = (newValue: number | undefined) => setVal(newValue);
+    const handleReset = () => setVal(value);
+    const [locked, setLocked] = React.useState<HTMLElement | null>(null);
     React.useEffect(() => {
-        if (startYear && startYear !== 'current' && startYear > new Date(val).getFullYear()) {
-            const date = new Date(val).setFullYear(startYear);
-            setVal(date);
+        if (ref && ref.current) {
+            if (isOpen) {
+                const l = getScrollParent(ref.current.parentNode?.parentNode || ref.current.parentNode);
+                if (l) l.style.overflow = 'hidden';
+                setLocked(l);
+            } else {
+                if (locked) locked.style.overflow = '';
+                setLocked(null);
+            }
         }
-        if (endYear && endYear !== 'current' && endYear < new Date(val).getFullYear()) {
-            const date = new Date(val).setFullYear(endYear);
-            setVal(date);
-        }
-    }, [startYear, endYear]);
+    }, [isOpen, ref?.current]);
     return (
-        <div className={'dt' + (className ? ' ' + className : '')}>
-            <div
-                className={'dt-input-box'}
-                onClick={() => {
-                    setOpen(true);
-                    if (typeof onOpen === 'function') onOpen();
-                }}
-            >
+        <div className={'dt' + (className ? ' ' + className : '')} ref={ref}>
+            <div className={'dt-input-box'} onClick={handleOpen}>
                 <Field {...props} meta={meta} value={val} pickerType={pickerType} placeholder={placeholder} />
                 <div
                     className={
@@ -86,61 +92,16 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
                 </div>
             </div>
             {isOpen && (
-                <div className={'dt-picker-box'}>
-                    <div className={'dt-picker-box__header'}>
-                        <div
-                            className={'dt-picker-close dt-input-icon'}
-                            onClick={() => {
-                                setOpen(false);
-                                if (typeof onClose === 'function') onClose();
-                            }}
-                        >
-                            <Icon id={close.id} viewBox={close.viewBox} name={'small'} />
-                        </div>
-                        <div className={'dt-picker-title'}>{placeholder}</div>
-                    </div>
-                    <div className={'dt-picker-box__content'}>
-                        {pickers.map((item) => (
-                            <Picker
-                                key={item}
-                                type={item}
-                                timestamp={val}
-                                onChange={(res: number) => setVal(res)}
-                                startYear={start}
-                                endYear={end}
-                            />
-                        ))}
-                    </div>
-                    <div className={'dt-picker-box__footer'}>
-                        <div className={'dt-picker-box__footer_left'}>
-                            <button className={'dt-picker-button'} onClick={() => setVal(new Date().getTime())}>
-                                {pickerType === 'time' ? 'Сейчас' : 'Сегодня'}
-                            </button>
-                        </div>
-                        <div className={'dt-picker-box__footer_right'}>
-                            <button
-                                className={'dt-picker-button'}
-                                onClick={() => {
-                                    setVal(value || new Date().getTime());
-                                    setOpen(false);
-                                    if (typeof onClose === 'function') onClose();
-                                }}
-                            >
-                                Сбросить
-                            </button>
-                            <button
-                                className={'dt-picker-button dt-picker-button--blue'}
-                                onClick={() => {
-                                    setOpen(false);
-                                    if (typeof onClose === 'function') onClose();
-                                    onChange(val);
-                                }}
-                            >
-                                Готово
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <PickerBox
+                    startYear={startYear}
+                    endYear={endYear}
+                    value={val}
+                    handleClose={handleClose}
+                    handleChange={handleChange}
+                    handleReset={handleReset}
+                    placeholder={placeholder}
+                    pickerType={pickerType}
+                />
             )}
         </div>
     );

@@ -52,3 +52,14 @@ export const getMinutesList = (): string[] => {
             .split(':')[1];
     });
 };
+export function getScrollParent(node: Node | null): HTMLElement | null {
+    if (node == null) {
+        return null;
+    }
+    const el = node as HTMLElement;
+    if (el.scrollHeight > el.clientHeight) {
+        return el;
+    } else {
+        return getScrollParent(node.parentNode);
+    }
+}

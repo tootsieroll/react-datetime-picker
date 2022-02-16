@@ -1,7 +1,7 @@
 import React, { InputHTMLAttributes } from 'react';
 
 interface FieldProps extends InputHTMLAttributes<HTMLInputElement> {
-    value: number;
+    value: number | undefined;
     pickerType: 'date' | 'time' | 'datetime';
     placeholder: string;
     meta?: { [k: string]: string | null };
@@ -34,11 +34,13 @@ const Field: React.FC<FieldProps> = ({ meta, placeholder, value, pickerType, ...
             break;
     }
     const dateToString = (timestamp: number) => {
-        if (pickerType === 'time') {
-            return new Date(timestamp).toLocaleTimeString('ru', options);
-        } else {
-            return new Date(value).toLocaleDateString('ru', options);
-        }
+        if (value) {
+            if (pickerType === 'time') {
+                return new Date(timestamp).toLocaleTimeString('ru', options);
+            } else {
+                return new Date(value).toLocaleDateString('ru', options);
+            }
+        } else return '';
     };
     const [val, setVal] = React.useState<string>(value ? dateToString(value) : '');
     const [state, setState] = React.useState<any>({ hasLabel: !!value, touched: false });
