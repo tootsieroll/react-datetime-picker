@@ -661,7 +661,7 @@ var DateTimePicker = function DateTimePicker(_ref) {
       if (isOpen) {
         var _ref$current$parentNo;
 
-        var l = (0,_utils__WEBPACK_IMPORTED_MODULE_6__.getScrollParent)(((_ref$current$parentNo = ref.current.parentNode) === null || _ref$current$parentNo === void 0 ? void 0 : _ref$current$parentNo.parentNode) || ref.current.parentNode);
+        var l = (0,_utils__WEBPACK_IMPORTED_MODULE_6__.getScrollableParent)((_ref$current$parentNo = ref.current.parentNode) === null || _ref$current$parentNo === void 0 ? void 0 : _ref$current$parentNo.parentNode);
         if (l) l.style.overflow = 'hidden';
         setLocked(l);
       } else {
@@ -726,7 +726,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getDaysOfMonth": function() { return /* binding */ getDaysOfMonth; },
 /* harmony export */   "getHoursList": function() { return /* binding */ getHoursList; },
 /* harmony export */   "getMinutesList": function() { return /* binding */ getMinutesList; },
-/* harmony export */   "getScrollParent": function() { return /* binding */ getScrollParent; }
+/* harmony export */   "getScrollableParent": function() { return /* binding */ getScrollableParent; }
 /* harmony export */ });
 var getYearsList = function getYearsList(startYear, endYear) {
   var now = new Date().getFullYear();
@@ -798,18 +798,16 @@ var getMinutesList = function getMinutesList() {
     }).split(':')[1];
   });
 };
-function getScrollParent(node) {
-  if (node == null) {
-    return null;
-  }
 
-  var el = node;
+var isScrollable = function isScrollable(el) {
+  var hasScrollableContent = el.scrollHeight > el.clientHeight;
+  var overflowYStyle = window.getComputedStyle(el).overflowY;
+  var isOverflowAuto = overflowYStyle.indexOf('auto') !== -1;
+  return hasScrollableContent && isOverflowAuto;
+};
 
-  if (el.scrollHeight > el.clientHeight) {
-    return el;
-  } else {
-    return getScrollParent(node.parentNode);
-  }
+function getScrollableParent(el) {
+  return !el || el === document.body ? document.body : isScrollable(el) ? el : getScrollableParent(el.parentNode);
 }
 
 /***/ }),

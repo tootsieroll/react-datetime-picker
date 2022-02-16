@@ -4,7 +4,7 @@ import Icon from './components/Icon';
 import './styles/dt.sass';
 import calendar from './images/calendar.svg';
 import clock from './images/clock.svg';
-import { getScrollParent } from './utils';
+import { getScrollableParent } from './utils';
 import PickerBox from './components/PickerBox';
 
 interface DateTimePickerProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -64,7 +64,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
     React.useEffect(() => {
         if (ref && ref.current) {
             if (isOpen) {
-                const l = getScrollParent(ref.current.parentNode?.parentNode || ref.current.parentNode);
+                const l = getScrollableParent(ref.current.parentNode?.parentNode);
                 if (l) l.style.overflow = 'hidden';
                 setLocked(l);
             } else {

@@ -52,14 +52,18 @@ export const getMinutesList = (): string[] => {
             .split(':')[1];
     });
 };
-export function getScrollParent(node: Node | null): HTMLElement | null {
-    if (node == null) {
-        return null;
-    }
-    const el = node as HTMLElement;
-    if (el.scrollHeight > el.clientHeight) {
-        return el;
-    } else {
-        return getScrollParent(node.parentNode);
-    }
+
+const isScrollable = (el: HTMLElement) => {
+    const hasScrollableContent = el.scrollHeight > el.clientHeight;
+    const overflowYStyle = window.getComputedStyle(el).overflowY;
+    const isOverflowAuto = overflowYStyle.indexOf('auto') !== -1;
+    return hasScrollableContent && isOverflowAuto;
+};
+
+export function getScrollableParent(el: HTMLElement | null): HTMLElement | null {
+    return !el || el === document.body
+        ? document.body
+        : isScrollable(el)
+        ? el
+        : getScrollableParent(el.parentNode as HTMLElement);
 }
