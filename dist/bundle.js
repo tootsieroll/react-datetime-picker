@@ -67,11 +67,13 @@ var Field = function Field(_ref) {
   }
 
   var dateToString = function dateToString(timestamp) {
-    if (pickerType === 'time') {
-      return new Date(timestamp).toLocaleTimeString('ru', options);
-    } else {
-      return new Date(value).toLocaleDateString('ru', options);
-    }
+    if (value) {
+      if (pickerType === 'time') {
+        return new Date(timestamp).toLocaleTimeString('ru', options);
+      } else {
+        return new Date(value).toLocaleDateString('ru', options);
+      }
+    } else return '';
   };
 
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(value ? dateToString(value) : ''),
@@ -290,6 +292,96 @@ var Picker = function Picker(_ref) {
 
 /***/ }),
 
+/***/ "./src/components/PickerBox.tsx":
+/*!**************************************!*\
+  !*** ./src/components/PickerBox.tsx ***!
+  \**************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _Icon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Icon */ "./src/components/Icon.tsx");
+/* harmony import */ var _images_close_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../images/close.svg */ "./src/images/close.svg");
+/* harmony import */ var _Picker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Picker */ "./src/components/Picker.tsx");
+
+
+
+
+
+var PickerBox = function PickerBox(_ref) {
+  var handleClose = _ref.handleClose,
+      handleChange = _ref.handleChange,
+      handleReset = _ref.handleReset,
+      placeholder = _ref.placeholder,
+      pickerType = _ref.pickerType,
+      startYear = _ref.startYear,
+      endYear = _ref.endYear,
+      value = _ref.value;
+  var pickers = pickerType === 'datetime' ? ['date', 'time'] : [pickerType];
+  var start = startYear === 'current' ? new Date().getFullYear() : startYear;
+  var end = endYear === 'current' ? new Date().getFullYear() : endYear;
+  var timestamp = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(function () {
+    var result;
+    var nowDate = value ? value : new Date().getTime();
+    var nowYear = new Date(nowDate).getFullYear();
+    result = nowDate;
+    if (startYear && startYear !== 'current' && startYear > nowYear) result = new Date(nowDate).setFullYear(startYear);
+    if (endYear && endYear !== 'current' && endYear < nowYear) result = new Date(nowDate).setFullYear(endYear);
+    return result;
+  }, [startYear, endYear, value]);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: 'dt-picker-box'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: 'dt-picker-box__header'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: 'dt-picker-close dt-input-icon',
+    onClick: function onClick() {
+      return handleClose(false);
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Icon__WEBPACK_IMPORTED_MODULE_1__.default, {
+    id: _images_close_svg__WEBPACK_IMPORTED_MODULE_2__.default.id,
+    viewBox: _images_close_svg__WEBPACK_IMPORTED_MODULE_2__.default.viewBox,
+    name: 'small'
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: 'dt-picker-title'
+  }, placeholder)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: 'dt-picker-box__content'
+  }, pickers.map(function (item) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Picker__WEBPACK_IMPORTED_MODULE_3__.default, {
+      key: item,
+      type: item,
+      timestamp: timestamp,
+      onChange: handleChange,
+      startYear: start,
+      endYear: end
+    });
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: 'dt-picker-box__footer'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: 'dt-picker-box__footer_left'
+  }, (!endYear || endYear === 'current' || endYear >= new Date().getFullYear()) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+    className: 'dt-picker-button',
+    onClick: function onClick() {
+      return handleChange(new Date().getTime());
+    }
+  }, pickerType === 'time' ? 'Сейчас' : 'Сегодня')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: 'dt-picker-box__footer_right'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+    className: 'dt-picker-button',
+    onClick: handleReset
+  }, "\u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+    className: 'dt-picker-button dt-picker-button--blue',
+    onClick: function onClick() {
+      return handleClose(true);
+    }
+  }, "\u0413\u043E\u0442\u043E\u0432\u043E"))));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (PickerBox);
+
+/***/ }),
+
 /***/ "./src/components/PickerGroup.tsx":
 /*!****************************************!*\
   !*** ./src/components/PickerGroup.tsx ***!
@@ -464,12 +556,12 @@ var PickerGroup = function PickerGroup(_ref) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _components_Field__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Field */ "./src/components/Field.tsx");
-/* harmony import */ var _components_Picker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Picker */ "./src/components/Picker.tsx");
-/* harmony import */ var _components_Icon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Icon */ "./src/components/Icon.tsx");
-/* harmony import */ var _styles_dt_sass__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./styles/dt.sass */ "./src/styles/dt.sass");
-/* harmony import */ var _images_calendar_svg__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./images/calendar.svg */ "./src/images/calendar.svg");
-/* harmony import */ var _images_clock_svg__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./images/clock.svg */ "./src/images/clock.svg");
-/* harmony import */ var _images_close_svg__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./images/close.svg */ "./src/images/close.svg");
+/* harmony import */ var _components_Icon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Icon */ "./src/components/Icon.tsx");
+/* harmony import */ var _styles_dt_sass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./styles/dt.sass */ "./src/styles/dt.sass");
+/* harmony import */ var _images_calendar_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./images/calendar.svg */ "./src/images/calendar.svg");
+/* harmony import */ var _images_clock_svg__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./images/clock.svg */ "./src/images/clock.svg");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./utils */ "./src/utils/index.ts");
+/* harmony import */ var _components_PickerBox__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/PickerBox */ "./src/components/PickerBox.tsx");
 var _excluded = ["value", "pickerType", "placeholder", "onChange", "onClose", "onOpen", "className", "meta", "startYear", "endYear"];
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -512,7 +604,7 @@ var DateTimePicker = function DateTimePicker(_ref) {
       endYear = _ref.endYear,
       props = _objectWithoutProperties(_ref, _excluded);
 
-  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(value || new Date().getTime()),
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(value),
       _React$useState2 = _slicedToArray(_React$useState, 2),
       val = _React$useState2[0],
       setVal = _React$useState2[1];
@@ -522,9 +614,7 @@ var DateTimePicker = function DateTimePicker(_ref) {
       isOpen = _React$useState4[0],
       setOpen = _React$useState4[1];
 
-  var pickers = pickerType === 'datetime' ? ['date', 'time'] : [pickerType];
-  var start = startYear === 'current' ? new Date().getFullYear() : startYear;
-  var end = endYear === 'current' ? new Date().getFullYear() : endYear;
+  var ref = react__WEBPACK_IMPORTED_MODULE_0__.useRef(null);
 
   if (!placeholder) {
     switch (pickerType) {
@@ -542,26 +632,50 @@ var DateTimePicker = function DateTimePicker(_ref) {
     }
   }
 
+  var handleClose = function handleClose(applyChanges) {
+    setOpen(false);
+    if (typeof onClose === 'function') onClose(ref.current);
+    if (applyChanges && typeof onChange === 'function') onChange(val);
+  };
+
+  var handleOpen = function handleOpen() {
+    setOpen(true);
+    if (typeof onOpen === 'function') onOpen(ref.current);
+  };
+
+  var handleChange = function handleChange(newValue) {
+    return setVal(newValue);
+  };
+
+  var handleReset = function handleReset() {
+    return setVal(value);
+  };
+
+  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_0__.useState(null),
+      _React$useState6 = _slicedToArray(_React$useState5, 2),
+      locked = _React$useState6[0],
+      setLocked = _React$useState6[1];
+
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
-    if (startYear && startYear !== 'current' && startYear > new Date(val).getFullYear()) {
-      var date = new Date(val).setFullYear(startYear);
-      setVal(date);
-    }
+    if (ref && ref.current) {
+      if (isOpen) {
+        var _ref$current$parentNo;
 
-    if (endYear && endYear !== 'current' && endYear < new Date(val).getFullYear()) {
-      var _date = new Date(val).setFullYear(endYear);
-
-      setVal(_date);
+        var l = (0,_utils__WEBPACK_IMPORTED_MODULE_6__.getScrollParent)(((_ref$current$parentNo = ref.current.parentNode) === null || _ref$current$parentNo === void 0 ? void 0 : _ref$current$parentNo.parentNode) || ref.current.parentNode);
+        if (l) l.style.overflow = 'hidden';
+        setLocked(l);
+      } else {
+        if (locked) locked.style.overflow = '';
+        setLocked(null);
+      }
     }
-  }, [startYear, endYear]);
+  }, [isOpen, ref === null || ref === void 0 ? void 0 : ref.current]);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: 'dt' + (className ? ' ' + className : '')
+    className: 'dt' + (className ? ' ' + className : ''),
+    ref: ref
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: 'dt-input-box',
-    onClick: function onClick() {
-      setOpen(true);
-      if (typeof onOpen === 'function') onOpen();
-    }
+    onClick: handleOpen
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_Field__WEBPACK_IMPORTED_MODULE_1__.default, _extends({}, props, {
     meta: meta,
     value: val,
@@ -569,67 +683,22 @@ var DateTimePicker = function DateTimePicker(_ref) {
     placeholder: placeholder
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: 'dt-input-icon' + (meta && meta.error ? ' dt-input-icon--error' : '') + (meta && !meta.error && !!val ? ' dt-input-icon--success' : '')
-  }, pickerType === 'time' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_Icon__WEBPACK_IMPORTED_MODULE_3__.default, {
-    id: _images_clock_svg__WEBPACK_IMPORTED_MODULE_6__.default.id,
-    viewBox: _images_clock_svg__WEBPACK_IMPORTED_MODULE_6__.default.viewBox
-  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_Icon__WEBPACK_IMPORTED_MODULE_3__.default, {
-    id: _images_calendar_svg__WEBPACK_IMPORTED_MODULE_5__.default.id,
-    viewBox: _images_calendar_svg__WEBPACK_IMPORTED_MODULE_5__.default.viewBox
-  }))), isOpen && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: 'dt-picker-box'
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: 'dt-picker-box__header'
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: 'dt-picker-close dt-input-icon',
-    onClick: function onClick() {
-      setOpen(false);
-      if (typeof onClose === 'function') onClose();
-    }
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_Icon__WEBPACK_IMPORTED_MODULE_3__.default, {
-    id: _images_close_svg__WEBPACK_IMPORTED_MODULE_7__.default.id,
-    viewBox: _images_close_svg__WEBPACK_IMPORTED_MODULE_7__.default.viewBox,
-    name: 'small'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: 'dt-picker-title'
-  }, placeholder)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: 'dt-picker-box__content'
-  }, pickers.map(function (item) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_Picker__WEBPACK_IMPORTED_MODULE_2__.default, {
-      key: item,
-      type: item,
-      timestamp: val,
-      onChange: function onChange(res) {
-        return setVal(res);
-      },
-      startYear: start,
-      endYear: end
-    });
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: 'dt-picker-box__footer'
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: 'dt-picker-box__footer_left'
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    className: 'dt-picker-button',
-    onClick: function onClick() {
-      return setVal(new Date().getTime());
-    }
-  }, pickerType === 'time' ? 'Сейчас' : 'Сегодня')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: 'dt-picker-box__footer_right'
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    className: 'dt-picker-button',
-    onClick: function onClick() {
-      setVal(value || new Date().getTime());
-      setOpen(false);
-      if (typeof onClose === 'function') onClose();
-    }
-  }, "\u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    className: 'dt-picker-button dt-picker-button--blue',
-    onClick: function onClick() {
-      setOpen(false);
-      if (typeof onClose === 'function') onClose();
-      onChange(val);
-    }
-  }, "\u0413\u043E\u0442\u043E\u0432\u043E")))));
+  }, pickerType === 'time' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_Icon__WEBPACK_IMPORTED_MODULE_2__.default, {
+    id: _images_clock_svg__WEBPACK_IMPORTED_MODULE_5__.default.id,
+    viewBox: _images_clock_svg__WEBPACK_IMPORTED_MODULE_5__.default.viewBox
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_Icon__WEBPACK_IMPORTED_MODULE_2__.default, {
+    id: _images_calendar_svg__WEBPACK_IMPORTED_MODULE_4__.default.id,
+    viewBox: _images_calendar_svg__WEBPACK_IMPORTED_MODULE_4__.default.viewBox
+  }))), isOpen && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_PickerBox__WEBPACK_IMPORTED_MODULE_7__.default, {
+    startYear: startYear,
+    endYear: endYear,
+    value: val,
+    handleClose: handleClose,
+    handleChange: handleChange,
+    handleReset: handleReset,
+    placeholder: placeholder,
+    pickerType: pickerType
+  }));
 };
 
 DateTimePicker.defaultProps = {
@@ -656,7 +725,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getMonthList": function() { return /* binding */ getMonthList; },
 /* harmony export */   "getDaysOfMonth": function() { return /* binding */ getDaysOfMonth; },
 /* harmony export */   "getHoursList": function() { return /* binding */ getHoursList; },
-/* harmony export */   "getMinutesList": function() { return /* binding */ getMinutesList; }
+/* harmony export */   "getMinutesList": function() { return /* binding */ getMinutesList; },
+/* harmony export */   "getScrollParent": function() { return /* binding */ getScrollParent; }
 /* harmony export */ });
 var getYearsList = function getYearsList(startYear, endYear) {
   var now = new Date().getFullYear();
@@ -728,6 +798,19 @@ var getMinutesList = function getMinutesList() {
     }).split(':')[1];
   });
 };
+function getScrollParent(node) {
+  if (node == null) {
+    return null;
+  }
+
+  var el = node;
+
+  if (el.scrollHeight > el.clientHeight) {
+    return el;
+  } else {
+    return getScrollParent(node.parentNode);
+  }
+}
 
 /***/ }),
 
