@@ -52,7 +52,11 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
     const handleClose = (applyChanges?: boolean) => {
         setOpen(false);
         if (typeof onClose === 'function') onClose(ref.current);
-        if (applyChanges && typeof onChange === 'function') onChange(val);
+        if (applyChanges && typeof onChange === 'function') {
+            const date = val ?? new Date().getTime();
+            setVal(date);
+            onChange(date);
+        }
     };
     const handleOpen = () => {
         setOpen(true);
@@ -73,6 +77,9 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
             }
         }
     }, [isOpen, ref?.current]);
+    React.useEffect(() => {
+        setVal(value);
+    }, [value]);
     return (
         <div className={'dt' + (className ? ' ' + className : '')} ref={ref}>
             <div className={'dt-input-box'} onClick={handleOpen}>
